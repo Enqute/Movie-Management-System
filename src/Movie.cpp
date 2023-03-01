@@ -1,6 +1,6 @@
 #include "Core.h"
 
-void Movie::AddMovieFirst(std::string filepath)
+void Movie::AddMovieFirst(const std::string& filepath)
 {
     std::fstream file;
     file.open(filepath, std::ios::out);
@@ -29,6 +29,7 @@ void Movie::AddMovieFirst(std::string filepath)
             node->Movie->ReleasedDate = stringToDate(fileContent[6].c_str());
             node->Movie->Lang = stringToLang(fileContent[7].c_str());
             node->Prev = NULL;
+            node->Next = NULL;
 
             if (IsMovieEmpty())
                 m_Head = m_Tail = node;
@@ -47,22 +48,49 @@ void Movie::AddMovieFirst(std::string filepath)
     print("[Info] %d movies are successfully added.", count);
 }
 
-void Movie::AddMovieLast(MovieEntity* movie)
+void Movie::AddMovieLast(MovieEntity movie)
+{
+    Node* node = new Node();
+    node->Movie = movie;
+    node->Next = NULL;
+    node->Prev = NULL;
+
+    if (IsMovieEmpty())
+        m_Head = m_Tail = node;
+    else
+    {
+        node->Prev = m_Tail;
+        m_Tail->Next = node;
+        m_Tail = node;
+    }
+
+    print("[Info] \"%s\" is successfully added.", node->Movie.Title.c_str());
+}
+
+void Movie::InsertMovieAtIndex(int index, MovieEntity movie)
+{
+    Node* node = new Node();
+    node->Movie = movie;
+    node->Next = NULL;
+    node->Prev = NULL;
+
+    int counter = 0;
+    Node* trav = m_Head;
+    for (; trav != NULL && counter != index - 1; trav = trav->Next, counter++);
+    node->Next = trav->Next;
+    trav->Next->Prev = node;
+    trav->Next = node;
+    node->Prev = trav;
+
+    print("[Info] \"%s\" is successfully inserted at index %d", trav->Movie.Title.c_str(), index);
+}
+
+void Movie::InsertMovieById(MovieEntity movie, bool before, int ID)
 {
 
 }
 
-void Movie::InsertMovieAtIndex(int index, MovieEntity* movie)
-{
-
-}
-
-void Movie::InsertMovieById(MovieEntity* movie, bool before, int ID)
-{
-
-}
-
-void Movie::InsertMovieByTitle(MovieEntity* movie, bool before, std::string title)
+void Movie::InsertMovieByTitle(MovieEntity movie, bool before, std::string title)
 {
 
 }

@@ -29,6 +29,10 @@ private:
         Node* Prev;
     };
 
+private:
+    Node* m_Head = NULL;
+    Node* m_Tail = NULL;
+
 public:
     struct MovieEntity
     {
@@ -44,42 +48,35 @@ public:
     };
 
 public:
-    Movie() = delete;
-    Movie(const std::string& filepath)
-        : m_FilePath(filepath)
-    { 
-    }
+    void AddFirst(const std::string& filepath);
+    void AddLast(MovieEntity movie);
 
-public:
-    void AddMovieFirst();
-    void AddMovieLast(MovieEntity* movie);
+    void InsertAtIndex(int index, MovieEntity movie);
+    void InsertById(MovieEntity movie, bool before, int ID);
+    void InsertByTitle(MovieEntity movie, bool before, std::string title);
 
-    void InsertMovieAtIndex(int index, MovieEntity* movie);
-    void InsertMovieById(MovieEntity* movie, bool before, int ID);
-    void InsertMovieByTitle(MovieEntity* movie, bool before, std::string title);
+    void RemoveFirst();
+    void RemoveLast();
+    void RemoveById(int ID);
+    void RemoveByTitle(std::string title);
+    void RemoveByIndex(int index);
+    void Remove(MovieEntity movie);
+    void RemoveByLang(Language lang);
+    void RemoveByGenre(MovieType genre);
+    void RemoveByDate(Date releasedDate);
 
-    void RemoveMovieFirst();
-    void RemoveMovieLast();
-    void RemoveMovieById(int ID);
-    void RemoveMovieByTitle(std::string title);
-    void RemoveMovieByIndex(int index);
-    void RemoveMovie(MovieEntity movie);
-    void RemoveMovieByLang(Language lang);
-    void RemoveMovieByGenre(MovieType genre);
-    void RemoveMovieByDate(Date releasedDate);
+    MovieEntity GetById(int ID);
+    MovieEntity GetByTitle(std::string title);
+    MovieEntity GetByIndex(int index);
+    MovieEntity* GetByLang(Language lang);
+    MovieEntity* GetByGenre(MovieType genre, int top);
+    MovieEntity* GetByDate(Date releasedDate, int top);
+    MovieEntity* GetByPrice(float price, int top);
+    MovieEntity* GetByRate(float rate, int top);
+    MovieEntity* GetByLength(float length, int top);
 
-    MovieEntity GetMovieById(int ID);
-    MovieEntity GetMovieByTitle(std::string title);
-    MovieEntity GetMovieByIndex(int index);
-    MovieEntity* GetMoviesByLang(Language lang);
-    MovieEntity* GetMoviesByGenre(MovieType genre, int top);
-    MovieEntity* GetMoviesByDate(Date releasedDate, int top);
-    MovieEntity* GetMoviesByPrice(float price, int top);
-    MovieEntity* GetMoviesByRate(float rate, int top);
-    MovieEntity* GetMoviesByLength(float length, int top);
-
-    void UpdateMovieById(int ID, Movie movie);
-    void UpdateMovieByTitle(std::string title, Movie movie);
+    void UpdateById(int ID, Movie movie);
+    void UpdateByTitle(std::string title, Movie movie);
 
     void DisplayMovieForward();
     void DisplayMovieBackward();
@@ -97,9 +94,4 @@ private:
     std::string dateToString(Date date);
     std::string genreToString(MovieType genre);
     std::string langToString(Language lang);
-
-private:
-    std::string m_FilePath;
-    Node* m_Head = NULL;
-    Node* m_Tail = NULL;
 };
