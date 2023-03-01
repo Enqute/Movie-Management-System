@@ -82,22 +82,56 @@ void Movie::InsertMovieAtIndex(int index, MovieEntity movie)
     trav->Next = node;
     node->Prev = trav;
 
-    print("[Info] \"%s\" is successfully inserted at index %d", trav->Movie.Title.c_str(), index);
+    print("[Info] \"%s\" is successfully inserted at index %d", node->Movie.Title.c_str(), index);
 }
 
 void Movie::InsertMovieById(MovieEntity movie, bool before, int ID)
 {
+    Node* node = new Node();
+    node->Movie = movie;
+    node->Next = NULL;
+    node->Prev = NULL;
 
+    Node* trav = m_Head;
+    for (; trav != NULL && (before 
+        ? (trav->Next->Movie->ID != ID) 
+        : (trav->Movie->ID != ID)); trav = trav->Next, counter++);
+    node->Next = trav->Next;
+    trav->Next->Prev = node;
+    trav->Next = node;
+    node->Prev = trav;
+
+    print("[Info] \"%s\" is successfully inserted %s index %s", 
+        node->Movie.Title.c_str(), 
+        (before ? "before" : "after"), 
+        trav->Movie.Title.c_str());
 }
 
 void Movie::InsertMovieByTitle(MovieEntity movie, bool before, std::string title)
 {
+    Node* node = new Node();
+    node->Movie = movie;
+    node->Next = NULL;
+    node->Prev = NULL;
 
+    Node* trav = m_Head;
+    for (; trav != NULL && (before 
+        ? (trav->Next->Movie->Title != title) 
+        : (trav->Movie->Title != title)); trav = trav->Next, counter++);
+    node->Next = trav->Next;
+    trav->Next->Prev = node;
+    trav->Next = node;
+    node->Prev = trav;
+
+    print("[Info] \"%s\" is successfully inserted %s index %s", 
+        node->Movie.Title.c_str(), 
+        (before ? "before" : "after"), 
+        trav->Movie.Title.c_str());
 }
 
 void Movie::RemoveMovieFirst()
 {
-
+    
 }
 
 void Movie::RemoveMovieLast()
