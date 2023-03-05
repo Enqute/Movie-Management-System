@@ -1,8 +1,10 @@
-#pragma once
+#ifndef CORE_H_INCLUDED
+#define CORE_H_INCLUDED
 
-#include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <string>
 
 #define ASSERT(condition, message) if (!(condition)) { std::cout << message << std::endl; system("pause"); exit(-1); }
-#define print(message) printf("%s\n", message);
+
+#endif // CORE_H_INCLUDED
