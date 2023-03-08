@@ -77,8 +77,42 @@ Movie* GetByPrice(float price, int top);
 Movie* GetByRate(float rate, int top);
 Movie* GetByLength(float length, int top);
 
-void UpdateById(int ID, Movie movie);
-void UpdateByTitle(std::string title, Movie movie);
+void SaveStatus(const std::string& filepath);
+
+int CountByRate(float rate);
+int CountByPrice(float price);
+int CountByLength(float length);
+int CountByGenre(std::string genre);
+int CountByDate(std::string date);
+int CountByLang(std::string language);
+
+int GetSize();
+
+void UpdateId(int oldID, int newID);
+void UpdateTitle(int oldID, std::string newTitle);
+void UpdatePrice(int oldID, float newPrice);
+void UpdateLength(int oldID, float newLength);
+void UpdateRate(int oldID, float newRate);
+void UpdateGenre(int oldID, std::string newGenre);
+void UpdateLang(int oldID, std::string newLang);
+void UpdateDate(int oldID, std::string newDate);
+
+void SortById();
+void SortByTitle();
+void SortByPrice();
+void SortByLength();
+void SortByRate();
+void SortByGenre();
+void SortByLang();
+void SortByDate();
+
+void SortByTitle();
+void SortByPrice();
+void SortByLength();
+void SortByRate();
+void SortByGenre();
+void SortByLang();
+void SortByDate();
 
 void DisplayForward();
 void DisplayBackward();
