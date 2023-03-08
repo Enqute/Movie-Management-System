@@ -10,35 +10,45 @@ void AddFirst(const std::string& filepath)
 
     ASSERT(file.is_open(), "[Error]: FileNotFoundException thrown from 'AddMovieFirst(...)'. There is a mistake at the filepath");
 
-    int i = 0, count = 0;
-    std::string fileContent[8];
-    for (int i = 0; !file.eof(); i++)
+    std::string temp;
+    while (std::getline(file, temp));
+
+    int count = 0;
+
+    if (temp == "===================================")
+        std::cout << "[Warning] The file is empty. There is no data retrieve for.\n";
+    else
     {
-        std::string content;
-        if (!(i < 0))
-            std::getline(file, content);
-        if (content.find("=") != std::string::npos)
+        int i = 0;
+        std::string fileContent[8];
+        for (int i = 0; !file.eof(); i++)
         {
-            i = -1;
-            continue;
-        }
-        else fileContent[i] = content;
-        if (i == 7)
-        {
-            Movie movie;
-            movie.ID = std::atoi(fileContent[0].c_str());
-            movie.Title = fileContent[1];
-            movie.Rate = std::atof(fileContent[2].c_str());
-            movie.Price = std::atof(fileContent[3].c_str());
-            movie.Length = std::atof(fileContent[4].c_str());
-            movie.Genre = stringToGenre(fileContent[5].c_str());
-            movie.ReleasedDate = stringToDate(fileContent[6].c_str());
-            movie.Lang = stringToLang(fileContent[7].c_str());
+            std::string content;
+            if (!(i < 0))
+                std::getline(file, content);
+            if (content.find("=") != std::string::npos)
+            {
+                i = -1;
+                continue;
+            }
+            else fileContent[i] = content;
+            if (i == 7)
+            {
+                Movie movie;
+                movie.ID = std::atoi(fileContent[0].c_str());
+                movie.Title = fileContent[1];
+                movie.Rate = std::atof(fileContent[2].c_str());
+                movie.Price = std::atof(fileContent[3].c_str());
+                movie.Length = std::atof(fileContent[4].c_str());
+                movie.Genre = stringToGenre(fileContent[5].c_str());
+                movie.ReleasedDate = stringToDate(fileContent[6].c_str());
+                movie.Lang = stringToLang(fileContent[7].c_str());
 
-            AddFirst(movie);
+                AddFirst(movie);
 
-            i = -1;
-            count++;
+                i = -1;
+                count++;
+            }
         }
     }
 
@@ -626,12 +636,328 @@ Movie* GetByLength(float length, int top)
     return movies;
 }
 
-void UpdateById(int ID, Movie movie)
+void SaveStatus(const std::string& filepath)
+{
+    std::ofstream file(filepath);
+    if (IsEmpty())
+        file << "===================================";
+    else
+    {
+        for (Node* node = m_Head; node != NULL; node = node->Next)
+        {
+            file << node->Movie.ID << "\n";
+            file << node->Movie.Title << "\n";
+            file << node->Movie.Rate << "\n";
+            file << node->Movie.Price << "\n";
+            file << node->Movie.Length << "\n";
+            file << genreToString(node->Movie.Genre) << "\n";
+            file << dateToString(node->Movie.ReleasedDate) << "\n";
+            file << dateToString(node->Movie.Lang);
+            node == m_Tail ? file << "\n" : file << "\n===================================\n";
+        }
+    }
+    file.close();
+
+    std::cout << "[Success] The changes have been successfully applied.\n";
+}
+
+int CountByRate(float rate)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'CountByRate(...)'. The list is empty.");
+
+    int total = 0;
+    for (Node* node = m_Head; node != NULL; node = node->Next)
+    {
+        if (node->Movie.Rate == rate)
+            total++;
+    }
+
+    return total;
+}
+
+int CountByPrice(float price)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'CountByPrice(...)'. The list is empty.");
+
+    int total = 0;
+    for (Node* node = m_Head; node != NULL; node = node->Next)
+    {
+        if (node->Movie.Price == price)
+            total++;
+    }
+
+    return total;
+}
+
+int CountByLength(float length)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'CountByLength(...)'. The list is empty.");
+
+    int total = 0;
+    for (Node* node = m_Head; node != NULL; node = node->Next)
+    {
+        if (node->Movie.Length == length)
+            total++;
+    }
+
+    return total;
+}
+
+int CountByGenre(std::string genre)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'CountByGenre(...)'. The list is empty.");
+
+    int total = 0;
+    for (Node* node = m_Head; node != NULL; node = node->Next)
+    {
+        if (node->Movie.Genre == stringToGenre(genre))
+            total++;
+    }
+
+    return total;
+}
+
+int CountByDate(std::string date)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'CountByDate(...)'. The list is empty.");
+
+    int total = 0;
+    for (Node* node = m_Head; node != NULL; node = node->Next)
+    {
+        if (node->Movie.ReleasedDate == stringToDate(date))
+            total++;
+    }
+
+    return total;
+}
+
+int CountByLang(std::string language)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'CountByLang(...)'. The list is empty.");
+
+    int total = 0;
+    for (Node* node = m_Head; node != NULL; node = node->Next)
+    {
+        if (node->Movie.Lang == stringToLang(language))
+            total++;
+    }
+
+    return total;
+}
+
+int GetSize()
+{
+    return m_Size;
+}
+
+void UpdateId(int oldID, int newID)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateId(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateId(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.ID = newID;
+
+    std::cout << "[Success] The ID of the movie with Title \"" << GetById(oldID).Title 
+        << "\" is successfully updated by new ID of " << newID << ".\n";
+}
+
+void UpdateTitle(int oldID, std::string newTitle)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateTitle(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateTitle(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.Title = newTitle;
+
+    std::cout << "[Success] The Title of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new title of \"" << newTitle << "\".\n";
+}
+
+void UpdatePrice(int oldID, float newPrice)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdatePrice(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdatePrice(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.Price = newPrice;
+
+    std::cout << "[Success] The Price of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new Price of " << newPrice << ".\n";
+}
+
+void UpdateLength(int oldID, float newLength)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateLength(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateLength(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.Length = newLength;
+
+    std::cout << "[Success] The Time length of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new Length of " << newLength << ".\n";
+}
+
+void UpdateRate(int oldID, float newRate)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateRate(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateRate(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.Rate = newRate;
+
+    std::cout << "[Success] The Rating of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new Rate of " << newRate << ".\n";
+}
+
+void UpdateGenre(int oldID, std::string newGenre)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateById(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateById(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.Genre = stringToGenre(newGenre);
+
+    std::cout << "[Success] The Genre of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new Genre of " << newGenre << ".\n";
+}
+
+void UpdateLang(int oldID, std::string newLang)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateLang(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateLang(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.Lang = stringToLang(newLang);
+
+    std::cout << "[Success] The Language of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new Language of " << newLang << ".\n";
+}
+
+void UpdateDate(int oldID, std::string newDate)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateDate(...)'. The list is empty.");
+    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateDate(...)'. The movie is not in the list.");
+
+    Node* node = m_Head;
+    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    node->Movie.ReleasedDate = stringToDate(newDate);
+
+    std::cout << "[Success] The Date of the movie with Title \"" << GetById(oldID).Title
+        << "\" is successfully updated by new Date of " << newDate << ".\n";
+}
+
+void SortById()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortById()'. The list is empty.");
+
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && tempMovie.ID < tempNode->Movie.ID)
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
+}
+
+void SortByTitle()
 {
 
 }
 
-void UpdateByTitle(std::string title, Movie movie)
+void SortByPrice()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByPrice()'. The list is empty.");
+
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && tempMovie.Price < tempNode->Movie.Price)
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
+}
+
+void SortByLength()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByLength()'. The list is empty.");
+
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && tempMovie.Length < tempNode->Movie.Length)
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
+}
+
+void SortByRate()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByRate()'. The list is empty.");
+
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && tempMovie.Rate < tempNode->Movie.Rate)
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
+}
+
+void SortByGenre()
+{
+
+}
+
+void SortByLang()
+{
+
+}
+
+void SortByDate()
 {
 
 }
@@ -644,7 +970,7 @@ void DisplayForward()
     {
         std::cout << "YOU ARE DISPLAYING ALL THE MOVIES FORWARD\n";
         for (Node* node = m_Head; node != NULL; node = node->Next)
-            printNode(*node);
+            printMovie(*(node)->Movie);
     }
 }
 
@@ -656,7 +982,7 @@ void DisplayBackward()
     {
         std::cout << "YOU ARE DISPLAYING ALL THE MOVIES BACKWARD\n";
         for (Node* node = m_Tail; node != NULL; node = node->Prev)
-            printNode(*node);
+            printMovie(*(node)->Movie);
     }
 }
 
@@ -678,11 +1004,7 @@ int IndexOf(int movieID)
 int IndexOf(Movie movie)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'IndexOf(...)'. The list is empty.");
-    int i = 0;
-    for (Node* node = m_Head; node != NULL; node = node->Next, i++)
-        if (node->Movie.ID == movie.ID)
-            return i;
-    return -1;
+    return IndexOf(movie.ID);
 }
 
 bool Contains(int movieID)
@@ -691,17 +1013,17 @@ bool Contains(int movieID)
     return (IndexOf(movieID) != -1);
 }
 
-void printNode(Node node)
+void printMovie(Movie movie)
 {
     std::cout << "------------------------------------------------------------------------------\n";
-    std::cout << "ID: " << node.Movie.ID << "\n";
-    std::cout << "Title: " << node.Movie.Title.c_str() << "\n";
-    std::cout << "Rate: " << node.Movie.Rate << " / 10\n";
-    std::cout << "Price: $" << node.Movie.Price << "\n";
-    std::cout << "Length: " << node.Movie.Length << " Hr\n";
-    std::cout << "Genre: " << genreToString(node.Movie.Genre).c_str() << "\n";
-    std::cout << "Released Date: " << dateToString(node.Movie.ReleasedDate).c_str() << "\n";
-    std::cout << "Language: " << langToString(node.Movie.Lang).c_str() << "\n";
+    std::cout << "ID: " << movie.ID << "\n";
+    std::cout << "Title: " << movie.Title.c_str() << "\n";
+    std::cout << "Rate: " << movie.Rate << " / 10\n";
+    std::cout << "Price: $" << movie.Price << "\n";
+    std::cout << "Length: " << movie.Length << " Hr\n";
+    std::cout << "Genre: " << genreToString(movie.Genre).c_str() << "\n";
+    std::cout << "Released Date: " << dateToString(movie.ReleasedDate).c_str() << "\n";
+    std::cout << "Language: " << langToString(movie.Lang).c_str() << "\n";
     std::cout << "------------------------------------------------------------------------------\n";
 }
 
