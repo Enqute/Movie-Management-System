@@ -107,6 +107,7 @@ void SortByGenre();
 void SortByLang();
 void SortByDate();
 
+void TopByID(size_t size);
 void TopByTitle(size_t size);
 void TopByPrice(size_t size);
 void TopByRate(size_t size);

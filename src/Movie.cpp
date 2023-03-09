@@ -1288,6 +1288,17 @@ void SortByDate()
     }
 }
 
+void TopByID(size_t size)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByID()'. The list is empty.");
+    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByID()'. You entered index out of the size of the list.");
+
+    SortByID();
+    int i = 0;
+    for (Node* node = m_Head; i < size; node = node->Next, i++)
+        printMovie(node->Movie);
+}
+
 void TopByTitle(size_t size)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByTitle()'. The list is empty.");
