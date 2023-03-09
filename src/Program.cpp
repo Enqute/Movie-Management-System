@@ -40,6 +40,7 @@ program:
     std::cout << "--------- (9). Exit The Program                 ---------\n";
     std::cout << "---------------------------------------------------------\n";
     std::cout << "---------------------------------------------------------\n";
+    std::cout << ">> ";
     std::getline(std::cin, choice);
 
     if (choice == "1")
@@ -94,15 +95,58 @@ void LoadDatabase(const std::string& filepath)
 
 void AddMovies()
 {
-    size_t size;
-    std::cout << "How Many Movies do you want to add? ";
-    std::cin >> size;
-    // TODO: insert at middle
-    for (int i = 0; i < size; i++)
+addMovies:
+    system("cls");
+    std::string choice;
+    std::cout << "1. Insert at the last.\n";
+    std::cout << "2. Insert at the middle.\n";
+    std::cout << ">> ";
+    std::getline(std::cin, choice);
+
+    if (choice == "1")
+    {
+        size_t size;
+        std::cout << "How Many Movies do you want to add? ";
+        std::cin >> size;
+        for (int i = 0; i < size; i++)
+        {
+            Movie movie;
+            std::string genre, lang, date;
+
+            std::cout << "\nMovie\n";
+            std::cout << "\tID: ";
+            std::cin >> movie.ID;
+            std::cout << "\tTitle: ";
+            std::getline(std::cin, movie.Title);
+            std::cout << "\tRating: ";
+            std::cin >> movie.Rate;
+            std::cout << "\tPrice: ";
+            std::cin >> movie.Price;
+            std::cout << "\tLength: ";
+            std::cin >> movie.Length;
+            std::cout << "\tGenre (Movie Type): ";
+            std::getline(std::cin, genre);
+            movie.Genre = stringToGenre(genre);
+
+            std::cout << "\tDate: ";
+            std::getline(std::cin, date);
+            movie.ReleasedDate = stringToDate(date);
+
+            std::cout << "\tLanguage: ";
+            std::getline(std::cin, lang);
+            movie.Lang = stringToLang(lang);
+
+            AddLast(movie);
+        }
+
+        std::cout << "[Success] You have successfully added " << size << " movies.\n";
+    }
+    else if (choice == "2")
     {
         Movie movie;
         std::string genre, lang, date;
-
+    recieveMovie:
+        system("cls");
         std::cout << "\nMovie\n";
         std::cout << "\tID: ";
         std::cin >> movie.ID;
@@ -117,19 +161,53 @@ void AddMovies()
         std::cout << "\tGenre (Movie Type): ";
         std::getline(std::cin, genre);
         movie.Genre = stringToGenre(genre);
-
         std::cout << "\tDate: ";
         std::getline(std::cin, date);
         movie.ReleasedDate = stringToDate(date);
-
         std::cout << "\tLanguage: ";
         std::getline(std::cin, lang);
         movie.Lang = stringToLang(lang);
+        
+        ASSERT(movie.ID > 0, recieveMovie, "[Warning] Invalid ID. It should be > 0.");
+        ASSERT(movie.Rate >= 0.f && movie.Rate <= 10.f , recieveMovie, "[Warning] Invalid Rating. It should be between 0.0 and 10.0");
+        ASSERT(id > 0, recieveMovie, "[Warning]");
+        ASSERT(id > 0, recieveMovie, "[Warning]");
+        ASSERT(id > 0, recieveMovie, "[Warning]");
 
-        AddLast(movie);
+        chooseKeyType:
+        std::string keyType;
+        std::cout << "\nNow choose the type of key\n";
+        std::cout << "\t1. By its ID\n";
+        std::cout << "\t2. By its Title\n";
+        std::cout << "\t3. By its Position\n";
+        std::cout << ">> ";
+        std::getline(std::cin, keyType);
+
+        if (choice == "1")
+        {
+
+        }
+        else if (choice == "2")
+        {
+
+        }
+        else if (choice == "3")
+        {
+
+        }
+        else
+        {
+
+        }
+
+        std::cout << "Do you want to insert the new movie before/after the key? (b/*) ";
     }
-
-    std::cout << "[Success] You have successfully added " << size << " movies.\n";
+    else
+    {
+        std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+        system("pause");
+        goto addFirst;
+    }
     system("pause");
     Menu();
 }
