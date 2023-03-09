@@ -988,16 +988,16 @@ void UpdateId(int oldID, int newID)
         << "\" is successfully updated by new ID of " << newID << ".\n";
 }
 
-void UpdateTitle(int oldID, std::string newTitle)
+void UpdateTitle(std::string oldTitle, std::string newTitle)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateTitle(...)'. The list is empty.");
     ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateTitle(...)'. The movie is not in the list.");
 
     Node* node = m_Head;
-    for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
+    for (; node != NULL && node->Movie.Title != oldTitle; node = node->Next);
     node->Movie.Title = newTitle;
 
-    std::cout << "[Success] The Title of the movie with Title \"" << GetById(oldID).Title
+    std::cout << "[Success] The Title of the movie with Title \"" << oldTitle
         << "\" is successfully updated by new title of \"" << newTitle << "\".\n";
 }
 

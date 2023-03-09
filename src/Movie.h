@@ -90,7 +90,7 @@ int CountByLang(std::string language);
 int GetSize();
 
 void UpdateId(int oldID, int newID);
-void UpdateTitle(int oldID, std::string newTitle);
+void UpdateTitle(std::string oldTitle, std::string newTitle);
 void UpdatePrice(int oldID, float newPrice);
 void UpdateLength(int oldID, float newLength);
 void UpdateRate(int oldID, float newRate);

@@ -380,7 +380,149 @@ removeMovies:
 
 void UpdateMovies()
 {
+updateMovies:
+    system("cls");
+    int choice;
+    std::cout << "Do you want to update movie\n";
+    std::cout << "\t1. By its ID\n";
+    std::cout << "\t2. By its Title\n";
+    std::cout << "\t3. By its Price\n";
+    std::cout << "\t4. By its Length\n";
+    std::cout << "\t5. By its Rating\n";
+    std::cout << "\t6. By its Genre\n";
+    std::cout << "\t7. By its Language\n";
+    std::cout << "\t8. By its Date\n";
+    std::cin >> choice;
 
+    if (choice == 1)
+    {
+        int oldID, newID;
+    updateByIDRecieveOldID:
+        std::cout << "\nEnter the ID of the movie to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByIDRecieveOldID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+    
+    updateByIDRecieveNewID:
+        std::cout << "Enter the new ID of the movie: ";
+        std::cin >> newID;
+        VALIDATE(newID > 0, updateByIDRecieveNewID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+        UpdateId(oldID, newID);
+    }
+    else if (choice == 2)
+    {
+        char oldTitle[25], newTitle[25];
+        std::cout << "\nEnter the Title of the movie to be updated: ";
+        std::cin >> oldTitle;
+        std::cout << "\nEnter the new Title of the movie: ";
+        std::cin >> newTitle;
+
+        UpdateTitle(std::string(oldTitle), std::string(newTitle))
+    }
+    else if (choice == 3)
+    {
+        float newPrice;
+        int oldID;
+    updateByPriceRecieveID:
+        std::cout << "\nEnter the movie id to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByPriceRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+    updateByPriceRecievePrice:
+        std::cout << "Enter the new price of the movie: ";
+        std::cin >> newPrice;
+        VALIDATE(newPrice >= 0.f, updateByPriceRecievePrice, "[Warning] Invalid Price. Price can not be negative. Please re-enter the information correctly!");
+
+        UpdatePrice(oldID, newPrice);
+    }
+    else if (choice == 4)
+    {
+        float newLength;
+        int oldID;
+    updateByLengthRecieveID:
+        std::cout << "\nEnter the movie id to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByLengthRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+    updateByLengthRecieveLength:
+        std::cout << "Enter the new length of the movie: ";
+        std::cin >> newLength;
+        VALIDATE(newLength > 0.f, updateByLengthRecieveLength, "[Warning] Invalid Length. Length should be > 0. Please re-enter the information correctly!");
+
+        UpdateLength(oldID, newLength);
+    }
+    else if (choice == 5)
+    {
+        float newRating;
+        int oldID;
+    updateByRatingRecieveID:
+        std::cout << "\nEnter the movie id to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByRatingRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+    updateByRatingRecieveRating:
+        std::cout << "Enter the new Rating of the movie: ";
+        std::cin >> newRating;
+        VALIDATE(newRating >= 0.f && newRating <= 10.f , updateByRatingRecieveRating, "[Warning] Invalid Rating. It should be between 0.0 and 10.0. . Please re-enter the information correctly!");
+
+        UpdateRate(oldID, newRating);
+    }
+    else if (choice == 6)
+    {
+        char newGenre[25];
+        int oldID;
+    updateByGenreRecieveID:
+        std::cout << "\nEnter the movie id to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByGenreRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+        std::cout << "Enter the new Genre of the movie: ";
+        std::cin >> newGenre;
+        
+        UpdateGenre(oldID, std::string(newGenre));
+    }
+    else if (choice == 7)
+    {
+        char newLang[25];
+        int oldID;
+    updateByLangRecieveID:
+        std::cout << "\nEnter the movie id to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByLangRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+        std::cout << "Enter the new Language of the movie: ";
+        std::cin >> newLang;
+        
+        UpdateLang(oldID, std::string(newLang));
+    }
+    else if (choice == 8)
+    {
+        char newDate[25];
+        int oldID;
+    updateByDateRecieveID:
+        std::cout << "\nEnter the movie id to be updated: ";
+        std::cin >> oldID;
+        VALIDATE(oldID > 0, updateByPriceRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+
+    updateByDateRecieveDate:
+        std::cout << "Enter the new Date of the movie: ";
+        std::cin >> newDate;
+
+        Date tempDate = stringToDate(newDate);
+
+        VALIDATE(tempDate.Month >= 1 && tempDate.Month <= 12, removeByDate, "[Warning] Invalid Date. Month should be between 1 and 12. Please re-enter the information correctly!");
+        VALIDATE(tempDate.Date >= 1 && tempDate.Date <= 30, removeByDate, "[Warning] Invalid Date. Date should be between 1 and 30. Please re-enter the information correctly!");
+        VALIDATE(tempDate.Year >= 1, removeByDate, "[Warning] Invalid Date. Year should be at least > 0. Please re-enter the information correctly!");
+
+        UpdateDate(oldID, std::string(newDate));
+    }
+    else
+    {
+        std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+        system("pause");
+        goto updateMovies;
+    }
+    system("pause");
 }
 
 void SortMovies()
