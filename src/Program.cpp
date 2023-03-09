@@ -36,9 +36,12 @@ program:
     std::cout << "--------- (5). Sort Movies                      ---------\n";
     std::cout << "--------- (6). Other Functionalities            ---------\n";
     std::cout << "--------- (7). Help                             ---------\n";
-    std::cout << "--------- (8). About                            ---------\n";
+    std::cout << "--------- (8). About The Developers             ---------\n";
     std::cout << "--------- (9). Exit The Program                 ---------\n";
     std::cout << "---------------------------------------------------------\n";
+    std::cout << "-- If you are new to our program, we highly recommend ---\n";
+    std::cout << "-- you to start with the help section to understand   ---\n";
+    std::cout << "-- more about the program.                            ---\n";
     std::cout << "---------------------------------------------------------\n";
     std::cout << ">> ";
     std::getline(std::cin, choice);
@@ -103,78 +106,71 @@ addMovies:
     std::cout << ">> ";
     std::getline(std::cin, choice);
 
+recieveMovie:
+    Movie movie;
+    std::string genre, lang, date;
+
+    std::cout << "\nMovie\n";
+    std::cout << "\tID: ";
+    std::cin >> movie.ID;
+    std::cout << "\tTitle: ";
+    std::getline(std::cin, movie.Title);
+    std::cout << "\tRating: ";
+    std::cin >> movie.Rate;
+    std::cout << "\tPrice: ";
+    std::cin >> movie.Price;
+    std::cout << "\tLength: ";
+    std::cin >> movie.Length;
+    std::cout << "\tGenre (Movie Type): ";
+    std::getline(std::cin, genre);
+    movie.Genre = stringToGenre(genre);
+
+    std::cout << "\tDate: ";
+    std::getline(std::cin, date);
+    movie.ReleasedDate = stringToDate(date);
+
+    std::cout << "\tLanguage: ";
+    std::getline(std::cin, lang);
+    movie.Lang = stringToLang(lang);
+
+    ASSERT(movie.ID > 0, recieveMovie, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+    ASSERT(movie.Rate >= 0.f && movie.Rate <= 10.f , recieveMovie, "[Warning] Invalid Rating. It should be between 0.0 and 10.0. . Please re-enter the information correctly!");
+    ASSERT(movie.Price >= 0.f, recieveMovie, "[Warning] Invalid Price. Price can not be negative. Please re-enter the information correctly!");
+    ASSERT(movie.Length > 0.f, recieveMovie, "[Warning] Invalid Movie Length. It should be > 0. Please re-enter the information correctly!");
+    ASSERT(movie.ReleasedDate.Month >= 1 && movie.ReleasedDate.Month <= 12, recieveMovie, "[Warning] Invalid Date. Month should be between 1 and 12. Please re-enter the information correctly!");
+    ASSERT(movie.ReleasedDate.Date >= 1 && movie.ReleasedDate.Date <= 30, recieveMovie, "[Warning] Invalid Date. Date should be between 1 and 30. Please re-enter the information correctly!");
+    ASSERT(movie.ReleasedDate.Year >= 1, recieveMovie, "[Warning] Invalid Date. Year should be > 0. Please re-enter the information correctly!");
+    ASSERT(movie.Lang == 1 ||  // Language::AMHARIC
+        movie.Lang == 2 ||  // Language::ARABIC
+        movie.Lang == 3 ||  // Language::CHINESE
+        movie.Lang == 4 ||  // Language::KOREAN
+        movie.Lang == 5 ||  // Language::ENGLISH
+        movie.Lang == 6 ||  // Language::FRENCH
+        movie.Lang == 7 ||  // Language::HINDU
+        movie.Lang == 8 ||  // Language::SPANISH
+        , recieveMovie, "[Warning] Invalid Language. The Languages should be in the validated list of languages. Please re-enter the information correctly!");
+    ASSERT(movie.Genre == 1 ||  // MovieType::ACTION
+        movie.Genre == 2 ||  // MovieType::ADVENTURE
+        movie.Genre == 3 ||  // MovieType::COMMEDY
+        movie.Genre == 4 ||  // MovieType::DRAMA
+        movie.Genre == 5 ||  // MovieType::FANTANSY
+        movie.Genre == 6 ||  // MovieType::HORROR
+        movie.Genre == 7 ||  // MovieType::MYSTERY
+        movie.Genre == 8 ||  // MovieType::ROMANCE
+        movie.Genre == 9 ||  // MovieType::SCIFI
+        movie.Genre == 10 || // MovieType::SPORTS
+        movie.Genre == 11 || // MovieType::THRILLER
+        movie.Genre == 12    // MovieType::WESTERN
+        , recieveMovie, "[Warning] Invalid Genre. The genre should be in the validated movie type. Please re-enter the information correctly!");
+
+
     if (choice == "1")
     {
-        size_t size;
-        std::cout << "How Many Movies do you want to add? ";
-        std::cin >> size;
-        for (int i = 0; i < size; i++)
-        {
-            Movie movie;
-            std::string genre, lang, date;
-
-            std::cout << "\nMovie\n";
-            std::cout << "\tID: ";
-            std::cin >> movie.ID;
-            std::cout << "\tTitle: ";
-            std::getline(std::cin, movie.Title);
-            std::cout << "\tRating: ";
-            std::cin >> movie.Rate;
-            std::cout << "\tPrice: ";
-            std::cin >> movie.Price;
-            std::cout << "\tLength: ";
-            std::cin >> movie.Length;
-            std::cout << "\tGenre (Movie Type): ";
-            std::getline(std::cin, genre);
-            movie.Genre = stringToGenre(genre);
-
-            std::cout << "\tDate: ";
-            std::getline(std::cin, date);
-            movie.ReleasedDate = stringToDate(date);
-
-            std::cout << "\tLanguage: ";
-            std::getline(std::cin, lang);
-            movie.Lang = stringToLang(lang);
-
-            AddLast(movie);
-        }
-
-        std::cout << "[Success] You have successfully added " << size << " movies.\n";
+        AddLast(movie);
     }
     else if (choice == "2")
     {
-        Movie movie;
-        std::string genre, lang, date;
-    recieveMovie:
-        system("cls");
-        std::cout << "\nMovie\n";
-        std::cout << "\tID: ";
-        std::cin >> movie.ID;
-        std::cout << "\tTitle: ";
-        std::getline(std::cin, movie.Title);
-        std::cout << "\tRating: ";
-        std::cin >> movie.Rate;
-        std::cout << "\tPrice: ";
-        std::cin >> movie.Price;
-        std::cout << "\tLength: ";
-        std::cin >> movie.Length;
-        std::cout << "\tGenre (Movie Type): ";
-        std::getline(std::cin, genre);
-        movie.Genre = stringToGenre(genre);
-        std::cout << "\tDate: ";
-        std::getline(std::cin, date);
-        movie.ReleasedDate = stringToDate(date);
-        std::cout << "\tLanguage: ";
-        std::getline(std::cin, lang);
-        movie.Lang = stringToLang(lang);
-        
-        ASSERT(movie.ID > 0, recieveMovie, "[Warning] Invalid ID. It should be > 0.");
-        ASSERT(movie.Rate >= 0.f && movie.Rate <= 10.f , recieveMovie, "[Warning] Invalid Rating. It should be between 0.0 and 10.0");
-        ASSERT(id > 0, recieveMovie, "[Warning]");
-        ASSERT(id > 0, recieveMovie, "[Warning]");
-        ASSERT(id > 0, recieveMovie, "[Warning]");
-
-        chooseKeyType:
+    chooseKeyType:
         std::string keyType;
         std::cout << "\nNow choose the type of key\n";
         std::cout << "\t1. By its ID\n";
