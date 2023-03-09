@@ -98,19 +98,12 @@ void LoadDatabase(const std::string& filepath)
 
 void AddMovies()
 {
-addMovies:
-    system("cls");
-    std::string choice;
-    std::cout << "1. Insert at the last.\n";
-    std::cout << "2. Insert at the middle.\n";
-    std::cout << ">> ";
-    std::getline(std::cin, choice);
-
 recieveMovie:
+    system("cls");
     Movie movie;
     std::string genre, lang, date;
 
-    std::cout << "\nMovie\n";
+    std::cout << "Movie\n";
     std::cout << "\tID: ";
     std::cin >> movie.ID;
     std::cout << "\tTitle: ";
@@ -163,6 +156,12 @@ recieveMovie:
         movie.Genre == 12    // MovieType::WESTERN
         , recieveMovie, "[Warning] Invalid Genre. The genre should be in the validated movie type. Please re-enter the information correctly!");
 
+addMovies:
+    std::string choice;
+    std::cout << "\n1. Insert at the last.\n";
+    std::cout << "2. Insert at the middle.\n";
+    std::cout << ">> ";
+    std::getline(std::cin, choice);
 
     if (choice == "1")
     {
