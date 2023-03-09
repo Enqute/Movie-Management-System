@@ -8,51 +8,41 @@ Node* m_Head = NULL;
 Node* m_Tail = NULL;
 int m_Size = 0;
 
-void AddFirst(const std::string& filepath)
+void AddFirst(const char* filepath)
 {
     std::ifstream file(filepath);
 
     ASSERT(file.is_open(), "[Error]: FileNotFoundException thrown from 'AddMovieFirst(...)'. There is a mistake at the filepath");
 
-    std::string temp;
-    while (std::getline(file, temp));
-
-    int count = 0;
-
-    if (temp == "===================================")
-        std::cout << "[Warning] The file is empty. There is no data retrieve for.\n";
-    else
+    int i = 0, count = 0;
+    std::string fileContent[8];
+    for (int i = 0; !file.eof(); i++)
     {
-        int i = 0;
-        std::string fileContent[8];
-        for (int i = 0; !file.eof(); i++)
+        std::string content;
+        if (!(i < 0))
+            std::getline(file, content);
+        if (content.find("=") != std::string::npos)
         {
-            std::string content;
-            if (!(i < 0))
-                std::getline(file, content);
-            if (content.find("=") != std::string::npos)
-            {
-                i = -1;
-                continue;
-            }
-            else fileContent[i] = content;
-            if (i == 7)
-            {
-                Movie movie;
-                movie.ID = std::atoi(fileContent[0].c_str());
-                movie.Title = fileContent[1];
-                movie.Rate = std::atof(fileContent[2].c_str());
-                movie.Price = std::atof(fileContent[3].c_str());
-                movie.Length = std::atof(fileContent[4].c_str());
-                movie.Genre = stringToGenre(fileContent[5].c_str());
-                movie.ReleasedDate = stringToDate(fileContent[6].c_str());
-                movie.Lang = stringToLang(fileContent[7].c_str());
+            i = -1;
+            continue;
+        }
+        else fileContent[i] = content;
+        if (i == 7)
+        {
+            Movie movie;
+            movie.ID = std::atoi(fileContent[0].c_str());
+            movie.Title = fileContent[1];
+            movie.Rate = std::atof(fileContent[2].c_str());
+            movie.Price = std::atof(fileContent[3].c_str());
+            movie.Length = std::atof(fileContent[4].c_str());
+            movie.Genre = stringToGenre(fileContent[5].c_str());
+            movie.ReleasedDate = stringToDate(fileContent[6].c_str());
+            movie.Lang = stringToLang(fileContent[7].c_str());
 
-                AddFirst(movie);
+            AddFirst(movie);
 
-                i = -1;
-                count++;
-            }
+            i = -1;
+            count++;
         }
     }
 
@@ -347,12 +337,12 @@ void RemoveByGenre(std::string movieType)
 void RemoveByDate(std::string date)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'RemoveByDate(...)'. The list is empty.");
-    
+
     int countDeleted = 0;
     Date _date = stringToDate(date);
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
-        if (node->Movie.ReleasedDate == _date)
+        if (dateToString(node->Movie.ReleasedDate) == dateToString(_date))
         {
             Date nd = node->Movie.ReleasedDate;
             Date hd = m_Head->Movie.ReleasedDate;
@@ -371,7 +361,7 @@ void RemoveByDate(std::string date)
             countDeleted++;
         }
     }
-    
+
     if (countDeleted == 0)
         std::cout << "[Warning] There is no mpvies with the date " << date << ".\n";
     else std::cout << "[Success] " << countDeleted << " movies deleted by the date " << date << ".\n";
@@ -607,7 +597,7 @@ Movie GetByMaxRating()
 float GetByAvePrice()
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByAvePrice(...)'. The list is empty.");
-    
+
     float totalPrice = 0.f;
     for (Node* node = m_Head; node != NULL; node = node->Next)
         totalPrice += node->Movie.Price;
@@ -618,7 +608,7 @@ float GetByAvePrice()
 float GetByAveLength()
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByAveLength(...)'. The list is empty.");
-    
+
     float totalLength = 0.f;
     for (Node* node = m_Head; node != NULL; node = node->Next)
         totalLength += node->Movie.Length;
@@ -630,7 +620,7 @@ Movie* GetByLang(std::string lang)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByLang(...)'. The list is empty.");
 
-    Language _lang = stringToLang(lang);
+    Language _lang = stringToLang(lang.c_str());
     int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
@@ -656,7 +646,7 @@ Movie* GetByGenre(std::string genre, int top)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByGenre(...)'. The list is empty.");
 
-    Genre _genre = stringToGenre(genre);
+    MovieType _genre = stringToGenre(genre.c_str());
     int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
@@ -681,12 +671,12 @@ Movie* GetByGenre(std::string genre, int top)
 Movie* GetByDate(std::string releasedDate, int top)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByDate(...)'. The list is empty.");
-    
-    Date _date = stringToDate(date);
+
+    Date _date = stringToDate(releasedDate);
     Movie* movies = NULL;
 
     int index = 0, counter = 0;
-    
+
     if (_date.Date != 0 && _date.Month != 0 && _date.Year != 0)
     {
         for (Node* node = m_Head; node != NULL; node = node->Next)
@@ -887,7 +877,7 @@ void SaveStatus(const std::string& filepath)
             file << node->Movie.Length << "\n";
             file << genreToString(node->Movie.Genre) << "\n";
             file << dateToString(node->Movie.ReleasedDate) << "\n";
-            file << dateToString(node->Movie.Lang);
+            file << langToString(node->Movie.Lang);
             node == m_Tail ? file << "\n" : file << "\n===================================\n";
         }
     }
@@ -945,7 +935,7 @@ int CountByGenre(std::string genre)
     int total = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
-        if (node->Movie.Genre == stringToGenre(genre))
+        if (node->Movie.Genre == stringToGenre(genre.c_str()))
             total++;
     }
 
@@ -959,7 +949,7 @@ int CountByDate(std::string date)
     int total = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
-        if (node->Movie.ReleasedDate == stringToDate(date))
+        if (dateToString(node->Movie.ReleasedDate) == toUpper(date.c_str()))
             total++;
     }
 
@@ -973,7 +963,7 @@ int CountByLang(std::string language)
     int total = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
-        if (node->Movie.Lang == stringToLang(language))
+        if (langToString(node->Movie.Lang) == toUpper(language.c_str()))
             total++;
     }
 
@@ -994,7 +984,7 @@ void UpdateId(int oldID, int newID)
     for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
     node->Movie.ID = newID;
 
-    std::cout << "[Success] The ID of the movie with Title \"" << GetById(oldID).Title 
+    std::cout << "[Success] The ID of the movie with Title \"" << GetById(oldID).Title
         << "\" is successfully updated by new ID of " << newID << ".\n";
 }
 
@@ -1057,7 +1047,7 @@ void UpdateGenre(int oldID, std::string newGenre)
 
     Node* node = m_Head;
     for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
-    node->Movie.Genre = stringToGenre(newGenre);
+    node->Movie.Genre = stringToGenre(newGenre.c_str());
 
     std::cout << "[Success] The Genre of the movie with Title \"" << GetById(oldID).Title
         << "\" is successfully updated by new Genre of " << newGenre << ".\n";
@@ -1070,7 +1060,7 @@ void UpdateLang(int oldID, std::string newLang)
 
     Node* node = m_Head;
     for (; node != NULL && node->Movie.ID != oldID; node = node->Next);
-    node->Movie.Lang = stringToLang(newLang);
+    node->Movie.Lang = stringToLang(newLang.c_str());
 
     std::cout << "[Success] The Language of the movie with Title \"" << GetById(oldID).Title
         << "\" is successfully updated by new Language of " << newLang << ".\n";
@@ -1089,7 +1079,7 @@ void UpdateDate(int oldID, std::string newDate)
         << "\" is successfully updated by new Date of " << newDate << ".\n";
 }
 
-void SortById()
+void SortByID()
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortById()'. The list is empty.");
 
@@ -1211,7 +1201,7 @@ void SortByGenre()
             Node* tempNode = trav->Prev;
             Movie tempMovie = trav->Movie;
 
-            while (tempNode != NULL && genreToString(tempMovie.Genre) < genreToString(tempNode->Movie.Title))
+            while (tempNode != NULL && genreToString(tempMovie.Genre) < genreToString(tempNode->Movie.Genre))
             {
                 tempNode->Next->Movie = tempNode->Movie;
                 tempNode = tempNode->Prev;
@@ -1254,7 +1244,7 @@ void SortByDate()
             Node* tempNode = trav->Prev;
             Movie tempMovie = trav->Movie;
 
-            while (tempNode != NULL && dateToString(tempMovie.ReleasedDate.Year) < dateToString(tempNode->Movie.ReleasedDate.Year))
+            while (tempNode != NULL && tempMovie.ReleasedDate.Year < tempNode->Movie.ReleasedDate.Year)
             {
                 tempNode->Next->Movie = tempNode->Movie;
                 tempNode = tempNode->Prev;
@@ -1266,7 +1256,7 @@ void SortByDate()
             Node* tempNode = trav->Prev;
             Movie tempMovie = trav->Movie;
 
-            while (tempNode != NULL && dateToString(tempMovie.ReleasedDate.Month) < dateToString(tempNode->Movie.ReleasedDate.Month))
+            while (tempNode != NULL && tempMovie.ReleasedDate.Month < tempNode->Movie.ReleasedDate.Month)
             {
                 tempNode->Next->Movie = tempNode->Movie;
                 tempNode = tempNode->Prev;
@@ -1278,7 +1268,7 @@ void SortByDate()
             Node* tempNode = trav->Prev;
             Movie tempMovie = trav->Movie;
 
-            while (tempNode != NULL && dateToString(tempMovie.ReleasedDate.Date) < dateToString(tempNode->Movie.ReleasedDate.Date))
+            while (tempNode != NULL && tempMovie.ReleasedDate.Date < tempNode->Movie.ReleasedDate.Date)
             {
                 tempNode->Next->Movie = tempNode->Movie;
                 tempNode = tempNode->Prev;

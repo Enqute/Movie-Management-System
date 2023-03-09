@@ -41,7 +41,7 @@ struct Node
     Node* Prev;
 };
 
-void AddFirst(const std::string& filepath);
+void AddFirst(const char* filepath);
 void AddFirst(Movie movie);
 void AddLast(Movie movie);
 void InsertAtIndex(int index, Movie movie);
@@ -98,7 +98,7 @@ void UpdateGenre(int oldID, std::string newGenre);
 void UpdateLang(int oldID, std::string newLang);
 void UpdateDate(int oldID, std::string newDate);
 
-void SortById();
+void SortByID();
 void SortByTitle();
 void SortByPrice();
 void SortByLength();
@@ -121,7 +121,7 @@ int IndexOf(int movieID);
 int IndexOf(Movie movie);
 bool Contains(int movieID);
 
-void printNode(Node node);
+void printMovie(Movie movie);
 std::string toUpper(const char* string);
 
 Date stringToDate(std::string string);

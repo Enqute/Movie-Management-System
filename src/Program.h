@@ -4,7 +4,7 @@
 
 void Main();
 void Menu();
-void LoadDatabase(const std::string& filepath);
+void LoadDatabase(const char* filepath);
 void AddMovies();
 void RemoveMovies();
 void UpdateMovies();
