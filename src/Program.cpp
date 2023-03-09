@@ -232,7 +232,150 @@ addMovies:
 
 void RemoveMovies()
 {
+    int choice;
+removeMovies:
+    system("cls");
+    std::cout << "Do you want to delete\n";
+    std::cout << "\t1. The first movie.\n";
+    std::cout << "\t2. The last movie.\n";
+    std::cout << "\t3. The movie by its attributes.\n";
+    std::cin >> choice;
 
+    if (choice == 1)
+        RemoveFirst();
+    else if (choice == 2)
+        RemoveLast();
+    else if (choice == 3)
+    {
+    removeByKey:
+        int keyType;
+        std::cout << "\nDelete movie\n";
+        std::cout << "\t1. By its ID\n";
+        std::cout << "\t2. By its Title\n";
+        std::cout << "\t3. By its Position\n";
+        std::cout << "\t4. By its Language\n";
+        std::cout << "\t5. By its Date\n";
+        std::cout << "\t6. By its Genre\n";
+        std::cout << "\t7. By its Minimum value\n";
+        std::cout << "\t8. By its Maximum value\n";
+        std::cin >> keyType;
+
+        if (keyType == 1)
+        {
+        removeByID:
+            int id;
+            std::cout << "Enter the id of the movie: ";
+            std::cin >> id;
+
+            VALIDATE(id > 0, removeByID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+            RemoveById(id);
+        }
+        else if (keyType == 2)
+        {
+            char title[25];
+            std::cout << "Enter the title of the movie: ";
+            std::cin >> title;
+            
+            RemoveByTitle(title);
+        }
+        else if (keyType == 3)
+        {
+        removeByPosition:
+            int position;
+            std::cout << "Enter the position of the movie (E.g: 1 or 4 or 10): ";
+            std::cin >> position;
+
+            VALIDATE(position > 0, recievePos, "[Warning] Invalid Position. It should be > 0. Please re-enter the information correctly!");
+            RemoveByIndex(position - 1);
+        }
+        else if (keyType == 4)
+        {
+            char lang[25];
+            std::cout << "Enter the language of the movies (E.g: amharic, french, english): ";
+            std::cin >> lang;
+
+            RemoveByLang(std::string(lang));
+        }
+        else if (keyType == 5)
+        {
+        removeByDate:
+            char date[25];
+            std::cout << "Enter the date of the movies (E.g: mm/dd/yyyy format): ";
+            std::cin >> date;
+
+            Date tempDate = stringToDate(date);
+
+            VALIDATE(tempDate.Month >= 1 && tempDate.Month <= 12, removeByDate, "[Warning] Invalid Date. Month should be between 1 and 12. Please re-enter the information correctly!");
+            VALIDATE(tempDate.Date >= 1 && tempDate.Date <= 30, removeByDate, "[Warning] Invalid Date. Date should be between 1 and 30. Please re-enter the information correctly!");
+            VALIDATE(tempDate.Year >= 1, removeByDate, "[Warning] Invalid Date. Year should be at least > 0. Please re-enter the information correctly!");
+
+            RemoveByDate(std::string(date));
+        }
+        else if (keyType == 6)
+        {
+            char genre[25];
+            std::cout << "Enter the genre of the movies (E.g: action, horror, drama): ";
+            std::cin >> genre;
+
+            RemoveByGenre(std::string(genre));
+        }
+        else if (keyType == 7)
+        {
+        removeByMin:
+            int c;
+            std::cout << "\nDo you want to delete\n";
+            std::cout << "\t1. Movie with minimum price\n";
+            std::cout << "\t2. Movie with minimum rating\n";
+            std::cin >> c;
+
+            if (c == 1)
+                RemoveByMinPrice();
+            else if (c == 2)
+                RemoveByMinRate();
+            else
+            {
+                std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+                system("pause");
+                goto removeByMin;
+            }
+            system("pause");
+        }
+        else if (keyType == 8)
+        {
+        removeByMax:
+            int c;
+            std::cout << "\nDo you want to delete\n";
+            std::cout << "\t1. Movie with maximum price\n";
+            std::cout << "\t2. Movie with maximum rating\n";
+            std::cin >> c;
+
+            if (c == 1)
+                RemoveByMaxPrice();
+            else if (c == 2)
+                RemoveByMaxRate();
+            else
+            {
+                std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+                system("pause");
+                goto removeByMax;
+            }
+            system("pause");
+        }
+        else
+        {
+            std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+            system("pause");
+            goto removeByKey;
+        }
+        system("pause");
+    }
+    else
+    {
+        std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+        system("pause");
+        goto removeMovie;
+    }
+    system("pause");
 }
 
 void UpdateMovies()
