@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Core.h"
-#include <fstream>
 #include <string>
-#include <cstdlib>
 
 struct Date
 {
@@ -60,6 +57,10 @@ void Remove(Movie movie);
 void RemoveByLang(std::string lang);
 void RemoveByGenre(std::string genre);
 void RemoveByDate(std::string date);
+void RemoveByMinPrice();
+void RemoveByMinRate();
+void RemoveByMaxPrice();
+void RemoveByMaxRate();
 
 Movie GetById(int ID);
 Movie GetByTitle(std::string title);
@@ -106,13 +107,10 @@ void SortByGenre();
 void SortByLang();
 void SortByDate();
 
-void SortByTitle();
-void SortByPrice();
-void SortByLength();
-void SortByRate();
-void SortByGenre();
-void SortByLang();
-void SortByDate();
+void TopByTitle(size_t size);
+void TopByPrice(size_t size);
+void TopByRate(size_t size);
+void TopByDate(size_t size);
 
 void DisplayForward();
 void DisplayBackward();

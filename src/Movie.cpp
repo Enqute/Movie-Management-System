@@ -1,5 +1,9 @@
 #include "Movie.h"
 
+#include "Core.h"
+#include <fstream>
+#include <cstdlib>
+
 Node* m_Head = NULL;
 Node* m_Tail = NULL;
 int m_Size = 0;
@@ -371,6 +375,130 @@ void RemoveByDate(std::string date)
     if (countDeleted == 0)
         std::cout << "[Warning] There is no mpvies with the date " << date << ".\n";
     else std::cout << "[Success] " << countDeleted << " movies deleted by the date " << date << ".\n";
+}
+
+void RemoveByMinPrice()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'RemoveByMinPrice()'. The list is empty.");
+    ASSERT(m_Size > 1, "[Error] There is no additional movie to compare with.");
+
+    float minPrice = m_Head->Movie.Price;
+    int minPriceIndex = 0;
+    int counter = 0;
+    Node* node = m_Head->Next;
+    for (; node != NULL; node = node->Next, counter++)
+    {
+        if (minPrice > node->Movie.Price)
+        {
+            minPrice = node->Movie.Price;
+            minPriceIndex = counter;
+        }
+    }
+
+    if (minPriceIndex == 0)
+        RemoveFirst();
+    else if (minPriceIndex == m_Size - 1)
+        RemoveLast();
+    else
+    {
+        Node* node2 = m_Head;
+        int index = 0;
+        for (; index <= minPriceIndex; node2 = node2->Next, index++);
+        Remove(node2->Movie);
+    }
+}
+
+void RemoveByMinRate()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'RemoveByMinRate()'. The list is empty.");
+    ASSERT(m_Size > 1, "[Error] There is no additional movie to compare with.");
+
+    float minRate = m_Head->Movie.Rate;
+    int minRateIndex = 0;
+    int counter = 0;
+    Node* node = m_Head->Next;
+    for (; node != NULL; node = node->Next, counter++)
+    {
+        if (minRate > node->Movie.Rate)
+        {
+            minRate = node->Movie.Rate;
+            minRateIndex = counter;
+        }
+    }
+
+    if (minRateIndex == 0)
+        RemoveFirst();
+    else if (minRateIndex == m_Size - 1)
+        RemoveLast();
+    else
+    {
+        Node* node2 = m_Head;
+        int index = 0;
+        for (; index <= minRateIndex; node2 = node2->Next, index++);
+        Remove(node2->Movie);
+    }
+}
+
+void RemoveByMaxPrice()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'RemoveByMaxPrice()'. The list is empty.");
+    ASSERT(m_Size > 1, "[Error] There is no additional movie to compare with.");
+
+    float maxPrice = m_Head->Movie.Price;
+    int maxPriceIndex = 0;
+    int counter = 0;
+    Node* node = m_Head->Next;
+    for (; node != NULL; node = node->Next, counter++)
+    {
+        if (maxPrice < node->Movie.Price)
+        {
+            maxPrice = node->Movie.Price;
+            maxPriceIndex = counter;
+        }
+    }
+
+    if (maxPriceIndex == 0)
+        RemoveFirst();
+    else if (maxPriceIndex == m_Size - 1)
+        RemoveLast();
+    else
+    {
+        Node* node2 = m_Head;
+        int index = 0;
+        for (; index <= maxPriceIndex; node2 = node2->Next, index++);
+        Remove(node2->Movie);
+    }
+}
+
+void RemoveByMaxRate()
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'RemoveByMaxRate()'. The list is empty.");
+    ASSERT(m_Size > 1, "[Error] There is no additional movie to compare with.");
+
+    float maxRate = m_Head->Movie.Rate;
+    int maxRateIndex = 0;
+    int counter = 0;
+    Node* node = m_Head->Next;
+    for (; node != NULL; node = node->Next, counter++)
+    {
+        if (maxRate < node->Movie.Rate)
+        {
+            maxRate = node->Movie.Rate;
+            maxRateIndex = counter;
+        }
+    }
+
+    if (maxRateIndex == 0)
+        RemoveFirst();
+    else if (maxRateIndex == m_Size - 1)
+        RemoveLast();
+    else
+    {
+        Node* node2 = m_Head;
+        int index = 0;
+        for (; index <= maxRateIndex; node2 = node2->Next, index++);
+        Remove(node2->Movie);
+    }
 }
 
 Movie GetById(int ID)
@@ -985,7 +1113,24 @@ void SortById()
 
 void SortByTitle()
 {
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByTitle()'. The list is empty.");
 
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && tempMovie.Title < tempNode->Movie.Title)
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
 }
 
 void SortByPrice()
@@ -1056,17 +1201,135 @@ void SortByRate()
 
 void SortByGenre()
 {
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByGenre()'. The list is empty.");
 
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && genreToString(tempMovie.Genre) < genreToString(tempNode->Movie.Title))
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
 }
 
 void SortByLang()
 {
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByLang()'. The list is empty.");
 
+    if (m_Size > 1)
+    {
+        Node* trav = m_Head->Next;
+        for (; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && langToString(tempMovie.Lang) < langToString(tempNode->Movie.Lang))
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
 }
 
 void SortByDate()
 {
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByDate()'. The list is empty.");
 
+    if (m_Size > 1)
+    {
+        for (Node* trav = m_Head->Next; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && dateToString(tempMovie.ReleasedDate.Year) < dateToString(tempNode->Movie.ReleasedDate.Year))
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+        for (Node* trav = m_Head->Next; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && dateToString(tempMovie.ReleasedDate.Month) < dateToString(tempNode->Movie.ReleasedDate.Month))
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+        for (Node* trav = m_Head->Next; trav != NULL; trav = trav->Next)
+        {
+            Node* tempNode = trav->Prev;
+            Movie tempMovie = trav->Movie;
+
+            while (tempNode != NULL && dateToString(tempMovie.ReleasedDate.Date) < dateToString(tempNode->Movie.ReleasedDate.Date))
+            {
+                tempNode->Next->Movie = tempNode->Movie;
+                tempNode = tempNode->Prev;
+            }
+            tempNode->Next->Movie = tempMovie;
+        }
+    }
+}
+
+void TopByTitle(size_t size)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByTitle()'. The list is empty.");
+    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByTitle()'. You entered index out of the size of the list.");
+
+    SortByTitle();
+    int i = 0;
+    for (Node* node = m_Head; i < size; node = node->Next, i++)
+        printMovie(node->Movie);
+}
+
+void TopByPrice(size_t size)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByPrice()'. The list is empty.");
+    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByPrice()'. You entered index out of the size of the list.");
+
+    SortByPrice();
+    int i = 0;
+    for (Node* node = m_Head; i < size; node = node->Next, i++)
+        printMovie(node->Movie);
+}
+
+void TopByRate(size_t size)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByRate()'. The list is empty.");
+    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByRate()'. You entered index out of the size of the list.");
+
+    SortByRate();
+    int i = 0;
+    for (Node* node = m_Head; i < size; node = node->Next, i++)
+        printMovie(node->Movie);
+}
+
+void TopByDate(size_t size)
+{
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByDate()'. The list is empty.");
+    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByDate()'. You entered index out of the size of the list.");
+
+    SortByDate();
+    int i = 0;
+    for (Node* node = m_Head; i < size; node = node->Next, i++)
+        printMovie(node->Movie);
 }
 
 void DisplayForward()
