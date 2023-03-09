@@ -275,7 +275,7 @@ removeMovies:
             char title[25];
             std::cout << "Enter the title of the movie: ";
             std::cin >> title;
-            
+
             RemoveByTitle(title);
         }
         else if (keyType == 3)
@@ -401,7 +401,7 @@ updateMovies:
         std::cout << "\nEnter the ID of the movie to be updated: ";
         std::cin >> oldID;
         VALIDATE(oldID > 0, updateByIDRecieveOldID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
-    
+
     updateByIDRecieveNewID:
         std::cout << "Enter the new ID of the movie: ";
         std::cin >> newID;
@@ -417,7 +417,7 @@ updateMovies:
         std::cout << "\nEnter the new Title of the movie: ";
         std::cin >> newTitle;
 
-        UpdateTitle(std::string(oldTitle), std::string(newTitle))
+        UpdateTitle(std::string(oldTitle), std::string(newTitle));
     }
     else if (choice == 3)
     {
@@ -478,7 +478,7 @@ updateMovies:
 
         std::cout << "Enter the new Genre of the movie: ";
         std::cin >> newGenre;
-        
+
         UpdateGenre(oldID, std::string(newGenre));
     }
     else if (choice == 7)
@@ -492,7 +492,7 @@ updateMovies:
 
         std::cout << "Enter the new Language of the movie: ";
         std::cin >> newLang;
-        
+
         UpdateLang(oldID, std::string(newLang));
     }
     else if (choice == 8)
@@ -510,9 +510,9 @@ updateMovies:
 
         Date tempDate = stringToDate(newDate);
 
-        VALIDATE(tempDate.Month >= 1 && tempDate.Month <= 12, removeByDate, "[Warning] Invalid Date. Month should be between 1 and 12. Please re-enter the information correctly!");
-        VALIDATE(tempDate.Date >= 1 && tempDate.Date <= 30, removeByDate, "[Warning] Invalid Date. Date should be between 1 and 30. Please re-enter the information correctly!");
-        VALIDATE(tempDate.Year >= 1, removeByDate, "[Warning] Invalid Date. Year should be at least > 0. Please re-enter the information correctly!");
+        VALIDATE(tempDate.Month >= 1 && tempDate.Month <= 12, updateByDateRecieveDate, "[Warning] Invalid Date. Month should be between 1 and 12. Please re-enter the information correctly!");
+        VALIDATE(tempDate.Date >= 1 && tempDate.Date <= 30, updateByDateRecieveDate, "[Warning] Invalid Date. Date should be between 1 and 30. Please re-enter the information correctly!");
+        VALIDATE(tempDate.Year >= 1, updateByDateRecieveDate, "[Warning] Invalid Date. Year should be at least > 0. Please re-enter the information correctly!");
 
         UpdateDate(oldID, std::string(newDate));
     }

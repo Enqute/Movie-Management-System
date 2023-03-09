@@ -394,7 +394,10 @@ void RemoveByMinPrice()
         Node* node2 = m_Head;
         int index = 0;
         for (; index <= minPriceIndex; node2 = node2->Next, index++);
-        Remove(node2->Movie);
+        Node* temp = node2;
+        node2->Prev->Next = node2->Next;
+        node2->Next->Prev = node2->Prev;
+        delete temp;
     }
 }
 
@@ -425,7 +428,10 @@ void RemoveByMinRate()
         Node* node2 = m_Head;
         int index = 0;
         for (; index <= minRateIndex; node2 = node2->Next, index++);
-        Remove(node2->Movie);
+        Node* temp = node2;
+        node2->Prev->Next = node2->Next;
+        node2->Next->Prev = node2->Prev;
+        delete temp;
     }
 }
 
@@ -456,7 +462,10 @@ void RemoveByMaxPrice()
         Node* node2 = m_Head;
         int index = 0;
         for (; index <= maxPriceIndex; node2 = node2->Next, index++);
-        Remove(node2->Movie);
+        Node* temp = node2;
+        node2->Prev->Next = node2->Next;
+        node2->Next->Prev = node2->Prev;
+        delete temp;
     }
 }
 
@@ -487,7 +496,10 @@ void RemoveByMaxRate()
         Node* node2 = m_Head;
         int index = 0;
         for (; index <= maxRateIndex; node2 = node2->Next, index++);
-        Remove(node2->Movie);
+        Node* temp = node2;
+        node2->Prev->Next = node2->Next;
+        node2->Next->Prev = node2->Prev;
+        delete temp;
     }
 }
 
@@ -991,7 +1003,7 @@ void UpdateId(int oldID, int newID)
 void UpdateTitle(std::string oldTitle, std::string newTitle)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'UpdateTitle(...)'. The list is empty.");
-    ASSERT(Contains(oldID), "[Error] MovieNotFoundException thrown from 'UpdateTitle(...)'. The movie is not in the list.");
+    ASSERT(Contains(GetByTitle(oldTitle).ID), "[Error] MovieNotFoundException thrown from 'UpdateTitle(...)'. The movie is not in the list.");
 
     Node* node = m_Head;
     for (; node != NULL && node->Movie.Title != oldTitle; node = node->Next);
