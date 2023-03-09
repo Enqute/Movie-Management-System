@@ -285,7 +285,7 @@ removeMovies:
             std::cout << "Enter the position of the movie (E.g: 1 or 4 or 10): ";
             std::cin >> position;
 
-            VALIDATE(position > 0, recievePos, "[Warning] Invalid Position. It should be > 0. Please re-enter the information correctly!");
+            VALIDATE(position > 0, removeByPosition, "[Warning] Invalid Position. It should be > 0. Please re-enter the information correctly!");
             RemoveByIndex(position - 1);
         }
         else if (keyType == 4)
@@ -373,7 +373,7 @@ removeMovies:
     {
         std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
         system("pause");
-        goto removeMovie;
+        goto removeMovies;
     }
     system("pause");
 }
