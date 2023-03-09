@@ -172,31 +172,50 @@ recieveMovie:
     {
     chooseKeyType:
         std::string keyType;
+        char c;
         std::cout << "\nNow choose the type of key\n";
         std::cout << "\t1. By its ID\n";
         std::cout << "\t2. By its Title\n";
         std::cout << "\t3. By its Position\n";
         std::cout << ">> ";
         std::getline(std::cin, keyType);
+        std::cout << "\nDo you want to insert the new movie before/after? (b/*) ";
+        std::cin >> c;
 
         if (choice == "1")
         {
-
+            int id;
+        recieveID:
+            std::cout << "\nEnter the ID number: ";
+            std::cin >> id;
+            
+            ASSERT(id > 0, recieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+            InsertById(movie, (c == 'b' || c == 'B'), id);
         }
         else if (choice == "2")
         {
+            std::string title;
+            std::cout << "\nEnter the Title: ";
+            std::getline(std::cin, title);
 
+            InsertByTitle(movie, (c == 'b' || c == 'B'), title);
         }
         else if (choice == "3")
         {
+            int position;
+        recievePos:
+            std::cout << "\nEnter the Position of the movie: ";
+            std::cin >> position;
 
+            ASSERT(position > 0, recievePos, "[Warning] Invalid Position. It should be > 0. Please re-enter the information correctly!");
+            InsertByIndex(movie, (c == 'b' || c == 'B'), position - 1);
         }
         else
         {
-
+            std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+            system("pause");
+            goto chooseKeyType;
         }
-
-        std::cout << "Do you want to insert the new movie before/after the key? (b/*) ";
     }
     else
     {
