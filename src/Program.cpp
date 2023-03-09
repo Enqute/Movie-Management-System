@@ -220,7 +220,7 @@ addMovies:
     {
         std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
         system("pause");
-        goto addFirst;
+        goto addMovies;
     }
     system("pause");
     Menu();
