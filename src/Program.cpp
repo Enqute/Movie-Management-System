@@ -527,7 +527,62 @@ updateMovies:
 
 void SortMovies()
 {
+sortMovies:
+    system("cls");
+    int choice;
+    std::cout << "Sort Movies by their\n";
+    std::cout << "\t1. ID\n";
+    std::cout << "\t2. Title\n";
+    std::cout << "\t3. Price\n";
+    std::cout << "\t4. Length\n";
+    std::cout << "\t5. Rating\n";
+    std::cout << "\t6. Genre\n";
+    std::cout << "\t7. Language\n";
+    std::cout << "\t8. Date\n";
+    std::cin >> choice;
 
+    if (choice == 1)
+    {
+        SortByID();
+        DisplayForward();
+        system("pause");
+    }
+    else if (choice == 2)
+    {
+        SortByTitle();
+        DisplayForward();
+        system("pause");
+    }
+    else if (choice == 3)
+    {
+
+    }
+    else if (choice == 4)
+    {
+
+    }
+    else if (choice == 5)
+    {
+
+    }
+    else if (choice == 6)
+    {
+
+    }
+    else if (choice == 7)
+    {
+
+    }
+    else if (choice == 8)
+    {
+
+    }
+    else
+    {
+        std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+        system("pause");
+        goto sortMovies;
+    }
 }
 
 void DisplayMovies()

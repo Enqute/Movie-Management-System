@@ -3,6 +3,7 @@
 #include "Core.h"
 #include <fstream>
 #include <cstdlib>
+#include <algorithm>
 
 Node* m_Head = NULL;
 Node* m_Tail = NULL;
@@ -1113,6 +1114,34 @@ void SortByID()
     }
 }
 
+void sortedInsert(Node* newNode)
+{
+    Node* current;
+
+    if (m_Head == NULL)
+        m_Head = newNode;
+
+    else if (m_Head->Movie.Title >= newNode->Movie.Title) {
+        newNode->Next = m_Head;
+        newNode->Next->Prev = newNode;
+        m_Head = newNode;
+    }
+
+    else {
+        current = m_Head;
+        while (current->Next != NULL &&
+               current->Next->data < newNode->data)
+            current = current->Next;
+        newNode->Next = current->Next;
+
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
+    }
+}
+
 void SortByTitle()
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByTitle()'. The list is empty.");
@@ -1132,6 +1161,18 @@ void SortByTitle()
             }
             tempNode->Next->Movie = tempMovie;
         }
+
+
+
+        Node* sorted = NULL;
+        struct Node* current = *head_ref;
+        while (current != NULL) {
+            struct Node* next = current->next;
+            current->prev = current->next = NULL;
+            sortedInsert(&sorted, current);
+            current = next;
+        }
+        *head_ref = sorted;
     }
 }
 
