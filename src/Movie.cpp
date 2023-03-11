@@ -15,7 +15,7 @@ void AddFirst(const char* filepath)
 
     ASSERT(file.is_open(), "[Error]: FileNotFoundException thrown from 'AddMovieFirst(...)'. There is a mistake at the filepath");
 
-    int i = 0, count = 0;
+    int count = 0;
     std::string fileContent[8];
     for (int i = 0; !file.eof(); i++)
     {
@@ -1114,34 +1114,6 @@ void SortByID()
     }
 }
 
-void sortedInsert(Node* newNode)
-{
-    Node* current;
-
-    if (m_Head == NULL)
-        m_Head = newNode;
-
-    else if (m_Head->Movie.Title >= newNode->Movie.Title) {
-        newNode->Next = m_Head;
-        newNode->Next->Prev = newNode;
-        m_Head = newNode;
-    }
-
-    else {
-        current = m_Head;
-        while (current->Next != NULL &&
-               current->Next->data < newNode->data)
-            current = current->Next;
-        newNode->Next = current->Next;
-
-        if (current->Next != NULL)
-            newNode->Next->Prev = newNode;
-
-        current->Next = newNode;
-        newNode->Prev = current;
-    }
-}
-
 void SortByTitle()
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByTitle()'. The list is empty.");
@@ -1161,18 +1133,6 @@ void SortByTitle()
             }
             tempNode->Next->Movie = tempMovie;
         }
-
-
-
-        Node* sorted = NULL;
-        struct Node* current = *head_ref;
-        while (current != NULL) {
-            struct Node* next = current->next;
-            current->prev = current->next = NULL;
-            sortedInsert(&sorted, current);
-            current = next;
-        }
-        *head_ref = sorted;
     }
 }
 
@@ -1334,55 +1294,55 @@ void SortByDate()
 void TopByID(size_t size)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByID()'. The list is empty.");
-    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByID()'. You entered index out of the size of the list.");
+    ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByID()'. You entered index out of the size of the list.");
 
     SortByID();
     int i = 0;
-    for (Node* node = m_Head; i < size; node = node->Next, i++)
+    for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
 }
 
 void TopByTitle(size_t size)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByTitle()'. The list is empty.");
-    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByTitle()'. You entered index out of the size of the list.");
+    ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByTitle()'. You entered index out of the size of the list.");
 
     SortByTitle();
     int i = 0;
-    for (Node* node = m_Head; i < size; node = node->Next, i++)
+    for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
 }
 
 void TopByPrice(size_t size)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByPrice()'. The list is empty.");
-    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByPrice()'. You entered index out of the size of the list.");
+    ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByPrice()'. You entered index out of the size of the list.");
 
     SortByPrice();
     int i = 0;
-    for (Node* node = m_Head; i < size; node = node->Next, i++)
+    for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
 }
 
 void TopByRate(size_t size)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByRate()'. The list is empty.");
-    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByRate()'. You entered index out of the size of the list.");
+    ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByRate()'. You entered index out of the size of the list.");
 
     SortByRate();
     int i = 0;
-    for (Node* node = m_Head; i < size; node = node->Next, i++)
+    for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
 }
 
 void TopByDate(size_t size)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByDate()'. The list is empty.");
-    ASSERT(size <= m_Size, "[Error] IndexOutOfBoundException thrown from 'TopByDate()'. You entered index out of the size of the list.");
+    ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByDate()'. You entered index out of the size of the list.");
 
     SortByDate();
     int i = 0;
-    for (Node* node = m_Head; i < size; node = node->Next, i++)
+    for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
 }
 
@@ -1454,7 +1414,7 @@ void printMovie(Movie movie)
 std::string toUpper(const char* string)
 {
     char* str = (char*)malloc(sizeof(string));
-    for (int i = 0; i < (sizeof(string)); i++)
+    for (int i = 0; i < int(sizeof(string)); i++)
     {
         char temp = string[i];
         if (((int)temp) >= 97 && ((int)temp) <= 122)

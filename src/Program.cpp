@@ -502,7 +502,7 @@ updateMovies:
     updateByDateRecieveID:
         std::cout << "\nEnter the movie id to be updated: ";
         std::cin >> oldID;
-        VALIDATE(oldID > 0, updateByPriceRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
+        VALIDATE(oldID > 0, updateByDateRecieveID, "[Warning] Invalid ID. It should be > 0. Please re-enter the information correctly!");
 
     updateByDateRecieveDate:
         std::cout << "Enter the new Date of the movie: ";
@@ -624,5 +624,17 @@ void Help()
 
 void About()
 {
-
+    system("cls");
+    std::cout << " ____________________________________________________________________________\n";
+    std::cout << "|                       THIS PROGRAM IS DEVELOPED BY                         |\n";
+    std::cout << "|____________________________________________________________________________|\n";
+    std::cout << "|          NAME            |     ID        |             E-MAIL              |\n";
+    std::cout << "|--------------------------|---------------|---------------------------------|\n";
+    std::cout << "|  1. Anduamlak Yalewlet   |  BDU1404555   |     anduamlak2014@gmail.com     |\n";
+    std::cout << "|--------------------------|---------------|---------------------------------|\n";
+    std::cout << "|  2. Eyob Zekarias        |  BDU1404462   |     eyobzekarias23@gmail.com    |\n";
+    std::cout << "|--------------------------|---------------|---------------------------------|\n";
+    std::cout << "|  3. Henok Eshetu         |  BDU1410525   |     henokesh95@gmail.com        |\n";
+    std::cout << "|__________________________|_______________|_________________________________|\n";
+    system("pause");
 }
