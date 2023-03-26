@@ -98,14 +98,15 @@ void UpdateGenre(int oldID, std::string newGenre);
 void UpdateLang(int oldID, std::string newLang);
 void UpdateDate(int oldID, std::string newDate);
 
-void SortByID();
-void SortByTitle();
-void SortByPrice();
-void SortByLength();
-void SortByRate();
-void SortByGenre();
-void SortByLang();
-void SortByDate();
+void SortedByID(Node** head_ref, Node* newNode);
+void SortedByTitle(Node** head_ref, Node* newNode);
+void SortedByPrice(Node** head_ref, Node* newNode);
+void SortedByLength(Node** head_ref, Node* newNode);
+void SortedByRate(Node** head_ref, Node* newNode);
+void SortedByGenre(Node** head_ref, Node* newNode);
+void SortedByLanguage(Node** head_ref, Node* newNode);
+void SortedByDate(Node** head_ref, Node* newNode);
+void InsertionSort(std::string type);
 
 void TopByID(size_t size);
 void TopByTitle(size_t size);
@@ -122,10 +123,10 @@ int IndexOf(Movie movie);
 bool Contains(int movieID);
 
 void printMovie(Movie movie);
-std::string toUpper(const char* string);
+std::string toUpper(std::string string);
 
 Date stringToDate(std::string string);
-MovieType stringToGenre(const char* string);
+MovieType stringToGenre(std::string string);
 Language stringToLang(const char* string);
 
 std::string dateToString(Date date);

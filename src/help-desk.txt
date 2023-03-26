@@ -1,0 +1,37 @@
+--------------------------------------------------------------------
+              Welcome to our Movie Management System
+--------------------------------------------------------------------
+
+- This is "Movie Management System", basically it do different tasks
+  like retrieve movie data from "text" file, and some operations
+  for instance deleting, updating, adding, sorting, searching, and
+  displaying movies.
+
+- The first thing you look when you start the program is the "menu"
+  or "an error" (which displays "some system files are missed. the
+  program will not operate as expected!"). If you see the former,
+  there is no error while starting the program (it is fine); but, the
+  later is because the text files like "help-desk.txt" or "movies.txt"
+  may not appear at the program workspace (directory).
+
+- After the program has started successfully, the menu will prop-up
+  and you are supposed to choose from those items.
+
+  (1) will load the movies from "movies.txt" file.
+  (2) will add movies at the begning, middle or at the last.
+  (3) will remove movies that you want to delete.
+  (4) will update the attribute of some specific movie that you want.
+  (5) will sort the movies by their title, id, price, length and so on.
+  (6) will display all the movies forward or backward.
+  (7) will grant you access on some functionalities like searching, 
+      saving movies and some other functionalities.
+  (8) will show you some instructions before you use the program.
+  (9) will display some informations about this program's developers
+  (10) will exit the program.
+
+  Note: before you load the "movies.txt" or add movies, some operations
+        like deleting, updating, sorting and searching may not available
+
+- Finally, if you have finished doing on this program the program will ask
+  you if you want to save your progress. Then, you can save or discard 
+  saving you status.

@@ -36,7 +36,7 @@ void AddFirst(const char* filepath)
             movie.Rate = std::atof(fileContent[2].c_str());
             movie.Price = std::atof(fileContent[3].c_str());
             movie.Length = std::atof(fileContent[4].c_str());
-            movie.Genre = stringToGenre(fileContent[5].c_str());
+            movie.Genre = stringToGenre(fileContent[5]);
             movie.ReleasedDate = stringToDate(fileContent[6].c_str());
             movie.Lang = stringToLang(fileContent[7].c_str());
 
@@ -962,7 +962,7 @@ int CountByDate(std::string date)
     int total = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
-        if (dateToString(node->Movie.ReleasedDate) == toUpper(date.c_str()))
+        if (dateToString(node->Movie.ReleasedDate) == toUpper(date))
             total++;
     }
 
@@ -976,7 +976,7 @@ int CountByLang(std::string language)
     int total = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
-        if (langToString(node->Movie.Lang) == toUpper(language.c_str()))
+        if (langToString(node->Movie.Lang) == toUpper(language))
             total++;
     }
 
@@ -1092,203 +1092,280 @@ void UpdateDate(int oldID, std::string newDate)
         << "\" is successfully updated by new Date of " << newDate << ".\n";
 }
 
-void SortByID()
+void SortedByID(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortById()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortById(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if ((*head_ref)->Movie.ID >= newNode->Movie.ID)
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && tempMovie.ID < tempNode->Movie.ID)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               current->Next->Movie.ID < newNode->Movie.ID)
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByTitle()
+void SortedByTitle(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByTitle()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByTitle(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if ((*head_ref)->Movie.Title >= newNode->Movie.Title)
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && tempMovie.Title < tempNode->Movie.Title)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               current->Next->Movie.Title < newNode->Movie.Title)
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByPrice()
+void SortedByPrice(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByPrice()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByPrice(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if ((*head_ref)->Movie.Price >= newNode->Movie.Price)
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && tempMovie.Price < tempNode->Movie.Price)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               current->Next->Movie.Price < newNode->Movie.Price)
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByLength()
+void SortedByLength(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByLength()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByLength(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if ((*head_ref)->Movie.Length >= newNode->Movie.Length)
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && tempMovie.Length < tempNode->Movie.Length)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               current->Next->Movie.Length < newNode->Movie.Length)
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByRate()
+void SortedByRate(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByRate()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByRate(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if ((*head_ref)->Movie.Rate >= newNode->Movie.Rate)
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && tempMovie.Rate < tempNode->Movie.Rate)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               current->Next->Movie.Rate < newNode->Movie.Rate)
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByGenre()
+void SortedByGenre(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByGenre()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByGenre(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if (genreToString((*head_ref)->Movie.Genre) >= genreToString(newNode->Movie.Genre))
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && genreToString(tempMovie.Genre) < genreToString(tempNode->Movie.Genre))
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               genreToString(current->Next->Movie.Genre) < genreToString(newNode->Movie.Genre))
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByLang()
+void SortedByLanguage(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByLang()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByLanguage(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if (langToString((*head_ref)->Movie.Lang) >= langToString(newNode->Movie.Lang))
     {
-        Node* trav = m_Head->Next;
-        for (; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
+        newNode->Next = *head_ref;
+        newNode->Next->Prev = newNode;
+        *head_ref = newNode;
+    }
 
-            while (tempNode != NULL && langToString(tempMovie.Lang) < langToString(tempNode->Movie.Lang))
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL &&
+               langToString(current->Next->Movie.Lang) < langToString(newNode->Movie.Lang))
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
     }
 }
 
-void SortByDate()
+void SortedByDate(Node** head_ref, Node* newNode)
 {
-    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByDate()'. The list is empty.");
+    ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'SortByDate(...)'. The list is empty.");
 
-    if (m_Size > 1)
+    Node* current;
+    if (*head_ref == NULL)
+        *head_ref = newNode;
+    else if ((*head_ref)->Movie.ReleasedDate.Year >= newNode->Movie.ReleasedDate.Year)
     {
-        for (Node* trav = m_Head->Next; trav != NULL; trav = trav->Next)
+        if ((*head_ref)->Movie.ReleasedDate.Month >= newNode->Movie.ReleasedDate.Month)
         {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
-
-            while (tempNode != NULL && tempMovie.ReleasedDate.Year < tempNode->Movie.ReleasedDate.Year)
+            if ((*head_ref)->Movie.ReleasedDate.Date >= newNode->Movie.ReleasedDate.Date)
             {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
+                newNode->Next = *head_ref;
+                newNode->Next->Prev = newNode;
+                *head_ref = newNode;
             }
-            tempNode->Next->Movie = tempMovie;
-        }
-        for (Node* trav = m_Head->Next; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
-
-            while (tempNode != NULL && tempMovie.ReleasedDate.Month < tempNode->Movie.ReleasedDate.Month)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
-        }
-        for (Node* trav = m_Head->Next; trav != NULL; trav = trav->Next)
-        {
-            Node* tempNode = trav->Prev;
-            Movie tempMovie = trav->Movie;
-
-            while (tempNode != NULL && tempMovie.ReleasedDate.Date < tempNode->Movie.ReleasedDate.Date)
-            {
-                tempNode->Next->Movie = tempNode->Movie;
-                tempNode = tempNode->Prev;
-            }
-            tempNode->Next->Movie = tempMovie;
         }
     }
+
+    else
+    {
+        current = *head_ref;
+        while (current->Next != NULL && current->Next->Movie.ReleasedDate.Year < newNode->Movie.ReleasedDate.Year)
+            current = current->Next;
+
+        newNode->Next = current->Next;
+        if (current->Next != NULL)
+            newNode->Next->Prev = newNode;
+
+        current->Next = newNode;
+        newNode->Prev = current;
+    }
+}
+
+void InsertionSort(std::string type)
+{
+    Node* sorted = NULL;
+    Node* current = m_Head;
+
+    while (current != NULL)
+    {
+        Node* next = current->Next;
+        current->Prev = current->Next = NULL;
+        if (toUpper(type.c_str()) == "ID")
+            SortedByID(&sorted, current);
+        else if (toUpper(type.c_str()) == "TITLE")
+            SortedByTitle(&sorted, current);
+        else if (toUpper(type.c_str()) == "PRICE")
+            SortedByPrice(&sorted, current);
+        else if (toUpper(type.c_str()) == "LENGTH")
+            SortedByLength(&sorted, current);
+        else if (toUpper(type.c_str()) == "RATE")
+            SortedByRate(&sorted, current);
+        else if (toUpper(type.c_str()) == "GENRE")
+            SortedByGenre(&sorted, current);
+        else if (toUpper(type.c_str()) == "LANGUAGE")
+            SortedByLanguage(&sorted, current);
+        else if (toUpper(type.c_str()) == "DATE")
+            SortedByDate(&sorted, current);
+        current = next;
+    }
+
+    m_Head = sorted;
 }
 
 void TopByID(size_t size)
@@ -1296,7 +1373,7 @@ void TopByID(size_t size)
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByID()'. The list is empty.");
     ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByID()'. You entered index out of the size of the list.");
 
-    SortByID();
+    InsertionSort("id");
     int i = 0;
     for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
@@ -1307,7 +1384,7 @@ void TopByTitle(size_t size)
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByTitle()'. The list is empty.");
     ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByTitle()'. You entered index out of the size of the list.");
 
-    SortByTitle();
+    InsertionSort("title");
     int i = 0;
     for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
@@ -1318,7 +1395,7 @@ void TopByPrice(size_t size)
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByPrice()'. The list is empty.");
     ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByPrice()'. You entered index out of the size of the list.");
 
-    SortByPrice();
+    InsertionSort("price");
     int i = 0;
     for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
@@ -1329,7 +1406,7 @@ void TopByRate(size_t size)
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByRate()'. The list is empty.");
     ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByRate()'. You entered index out of the size of the list.");
 
-    SortByRate();
+    InsertionSort("rate");
     int i = 0;
     for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
@@ -1340,7 +1417,7 @@ void TopByDate(size_t size)
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'TopByDate()'. The list is empty.");
     ASSERT(size <= size_t(m_Size), "[Error] IndexOutOfBoundException thrown from 'TopByDate()'. You entered index out of the size of the list.");
 
-    SortByDate();
+    InsertionSort("date");
     int i = 0;
     for (Node* node = m_Head; i < int(size); node = node->Next, i++)
         printMovie(node->Movie);
@@ -1411,10 +1488,10 @@ void printMovie(Movie movie)
     std::cout << "------------------------------------------------------------------------------\n";
 }
 
-std::string toUpper(const char* string)
+std::string toUpper(std::string string)
 {
-    char* str = (char*)malloc(sizeof(string));
-    for (int i = 0; i < int(sizeof(string)); i++)
+    std::string str =  string;
+    for (int i = 0; i < string.length(); i++)
     {
         char temp = string[i];
         if (((int)temp) >= 97 && ((int)temp) <= 122)
@@ -1441,7 +1518,7 @@ Date stringToDate(std::string string)
     return date;
 }
 
-MovieType stringToGenre(const char* string)
+MovieType stringToGenre(std::string string)
 {
     if (toUpper(string) == "ACTION") return MovieType::ACTION;
     else if (toUpper(string) == "ADVENTURE") return MovieType::ADVENTURE;
