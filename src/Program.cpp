@@ -821,7 +821,7 @@ otherFunctionalities:
         std::cout << "3. Length\n";
         std::cout << "4. Genre\n";
         std::cout << "5. Date\n";
-        std::cout << "5. Language\n";
+        std::cout << "6. Language\n";
         std::cout << ">> ";
         std::cin >> c;
 
@@ -833,23 +833,63 @@ otherFunctionalities:
             std::cin >> price;
             VALIDATE(price >= 0, priceInput, "[Warning] Invalid amount of price. It should be >= 0.");
 
-            int amount = CountByPrice()
+            int amount = CountByPrice(price);
+            std::cout << "[Info] There are (is) " << amount << " number(s) movie(s) by $" << price << "\n";
+            system("cls");
         }
         else if (c == 2)
         {
+        ratingInput:
+            float rating;
+            std::cout << "\nEnter the amount of rating: ";
+            std::cin >> rating;
+            VALIDATE(rating >= 0 && rating <= 10, ratingInput, "[Warning] Invalid amount of rating. It should be between 0 and 10.");
 
+            int amount = CountByRating(rating);
+            std::cout << "[Info] There are (is) " << amount << " number(s) movie(s) by " << rating << " rating.\n";
+            system("cls");
         }
         else if (c == 3)
         {
+        lengthInput:
+            float length;
+            std::cout << "\nEnter the length of the movie: ";
+            std::cin >> length;
+            VALIDATE(length > 0, lengthInput, "[Warning] Invalid movie length. It should be > 0.");
 
+            int amount = CountByLength(length);
+            std::cout << "[Info] There are (is) " << amount << " number(s) movie(s) by " << length << " length.\n";
+            system("cls");
         }
         else if (c == 4)
         {
+            char genre[25];
+            std::cout << "\nEnter the genre of the movie: ";
+            std::cin >> genre;
 
+            int amount = CountByGenre(genre);
+            std::cout << "[Info] There are (is) " << amount << " number(s) movie(s) by " << genre << " genre.\n";
+            system("cls");
         }
         else if (c == 5)
         {
+            char date[25];
+            std::cout << "\nEnter the date of the movie: ";
+            std::cin >> date;
 
+            int amount = CountByDate(date);
+            std::cout << "[Info] There are (is) " << amount << " number(s) movie(s) by " << date << ".\n";
+            system("cls");
+        }
+        else if (c == 6)
+        {
+            char lang[25];
+            std::cout << "\nEnter the language of the movie: ";
+            std::cin >> lang;
+
+            int amount = CountByLang(lang);
+            std::cout << "[Info] There are (is) " << amount << " number(s) movie(s) by " << lang << " language.\n";
+            system("cls");
         }
         else
         {
@@ -860,7 +900,9 @@ otherFunctionalities:
     }
     else if (choice == 4)
     {
-
+        SaveStatus("modified-movies.txt");
+        std::cout << "[Success] You have successfully saved your status.\n";
+        system("pause");
     }
     else
     {
