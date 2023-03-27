@@ -71,12 +71,12 @@ Movie GetByMaxPrice();
 Movie GetByMaxRating();
 float GetByAvePrice();
 float GetByAveLength();
-Movie* GetByLang(std::string lang);
-Movie* GetByGenre(std::string genre, int top);
-Movie* GetByDate(std::string releasedDate, int top);
-Movie* GetByPrice(float price, int top);
-Movie* GetByRate(float rate, int top);
-Movie* GetByLength(float length, int top);
+void GetByLang(std::string lang);
+void GetByGenre(std::string genre);
+void GetByDate(std::string releasedDate);
+void GetByPrice(float price);
+void GetByRate(float rate);
+void GetByLength(float length);
 
 void SaveStatus(const std::string& filepath);
 

@@ -629,82 +629,43 @@ float GetByAveLength()
     return averageLength;
 }
 
-Movie* GetByLang(std::string lang)
+void GetByLang(std::string lang)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByLang(...)'. The list is empty.");
 
     Language _lang = stringToLang(lang.c_str());
-    int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
         if (_lang == node->Movie.Lang)
-            counter++;
+            printMovie(node->Movie);
     }
-
-    int index = 0;
-    Movie* movies = (Movie*)malloc(sizeof(Movie) * counter);
-    for (Node* node = m_Head; node != NULL; node = node->Next)
-    {
-        if (_lang == node->Movie.Lang)
-        {
-            movies[index] = node->Movie;
-            index++;
-        }
-    }
-
-    return movies;
 }
 
-Movie* GetByGenre(std::string genre, int top)
+void GetByGenre(std::string genre)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByGenre(...)'. The list is empty.");
 
     MovieType _genre = stringToGenre(genre.c_str());
-    int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
         if (_genre == node->Movie.Genre)
-            counter++;
-    }
+            printMovie(node->Movie);
 
-    int index = 0;
-    Movie* movies = (Movie*)malloc(sizeof(Movie) * counter);
-    for (Node* node = m_Head; node != NULL; node = node->Next)
-    {
-        if (_genre == node->Movie.Genre)
-        {
-            movies[index] = node->Movie;
-            index++;
-        }
     }
-
-    return movies;
 }
 
-Movie* GetByDate(std::string releasedDate, int top)
+void GetByDate(std::string releasedDate)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByDate(...)'. The list is empty.");
 
     Date _date = stringToDate(releasedDate);
-    Movie* movies = NULL;
-
-    int index = 0, counter = 0;
-
     if (_date.Date != 0 && _date.Month != 0 && _date.Year != 0)
     {
         for (Node* node = m_Head; node != NULL; node = node->Next)
         {
             Date nd = node->Movie.ReleasedDate;
             if (_date.Date == nd.Date && _date.Month == nd.Month && _date.Year == nd.Year)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            Date nd = node->Movie.ReleasedDate;
-            if (_date.Date == nd.Date && _date.Month == nd.Month && _date.Year == nd.Year)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
     else if (_date.Date != 0 && _date.Month != 0 && _date.Year == 0)
@@ -713,15 +674,7 @@ Movie* GetByDate(std::string releasedDate, int top)
         {
             Date nd = node->Movie.ReleasedDate;
             if (_date.Date == nd.Date && _date.Month == nd.Month)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            Date nd = node->Movie.ReleasedDate;
-            if (_date.Date == nd.Date && _date.Month == nd.Month)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
     else if (_date.Date != 0 && _date.Month == 0 && _date.Year != 0)
@@ -730,15 +683,7 @@ Movie* GetByDate(std::string releasedDate, int top)
         {
             Date nd = node->Movie.ReleasedDate;
             if (_date.Date == nd.Date && _date.Year == nd.Year)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            Date nd = node->Movie.ReleasedDate;
-            if (_date.Date == nd.Date && _date.Year == nd.Year)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
     else if (_date.Date != 0 && _date.Month == 0 && _date.Year == 0)
@@ -746,14 +691,7 @@ Movie* GetByDate(std::string releasedDate, int top)
         for (Node* node = m_Head; node != NULL; node = node->Next)
         {
             if (_date.Date == node->Movie.ReleasedDate.Date)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            if (_date.Date == node->Movie.ReleasedDate.Date)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
 
@@ -762,16 +700,8 @@ Movie* GetByDate(std::string releasedDate, int top)
         for (Node* node = m_Head; node != NULL; node = node->Next)
         {
             Date nd = node->Movie.ReleasedDate;
-            if (_date.Month == nd.Month && _date.Year == nd.Year)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            Date nd = node->Movie.ReleasedDate;
             if (_date.Date == nd.Month && _date.Year == nd.Year)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
     else if (_date.Date == 0 && _date.Month != 0 && _date.Year == 0)
@@ -779,14 +709,7 @@ Movie* GetByDate(std::string releasedDate, int top)
         for (Node* node = m_Head; node != NULL; node = node->Next)
         {
             if (_date.Month == node->Movie.ReleasedDate.Month)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            if (_date.Month == node->Movie.ReleasedDate.Month)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
     else if (_date.Date == 0 && _date.Month == 0 && _date.Year != 0)
@@ -794,84 +717,42 @@ Movie* GetByDate(std::string releasedDate, int top)
         for (Node* node = m_Head; node != NULL; node = node->Next)
         {
             if (_date.Year == node->Movie.ReleasedDate.Year)
-                counter++;
-        }
-
-        movies = (Movie*)malloc(sizeof(Movie) * counter);
-        for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-        {
-            if (_date.Year == node->Movie.ReleasedDate.Year)
-                movies[index] = node->Movie;
+                printMovie(node->Movie);
         }
     }
-
-    return movies;
 }
 
-Movie* GetByPrice(float price, int top)
+void GetByPrice(float price)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByPrice(...)'. The list is empty.");
 
-    int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
         if (price == node->Movie.Price)
-            counter++;
+            printMovie(node->Movie);
     }
-
-    int index = 0;
-    Movie* movies = (Movie*)malloc(sizeof(Movie) * counter);
-    for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-    {
-        if (price == node->Movie.Price)
-            movies[index] = node->Movie;
-    }
-
-    return movies;
 }
 
-Movie* GetByRate(float rate, int top)
+void GetByRate(float rate)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByRate(...)'. The list is empty.");
 
-    int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
         if (rate == node->Movie.Rate)
-            counter++;
+            printMovie(node->Movie);
     }
-
-    int index = 0;
-    Movie* movies = (Movie*)malloc(sizeof(Movie) * counter);
-    for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-    {
-        if (rate == node->Movie.Rate)
-            movies[index] = node->Movie;
-    }
-
-    return movies;
 }
 
-Movie* GetByLength(float length, int top)
+void GetByLength(float length)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'GetByLength(...)'. The list is empty.");
 
-    int counter = 0;
     for (Node* node = m_Head; node != NULL; node = node->Next)
     {
         if (length == node->Movie.Length)
-            counter++;
+            printMovie(node->Movie);
     }
-
-    int index = 0;
-    Movie* movies = (Movie*)malloc(sizeof(Movie) * counter);
-    for (Node* node = m_Head; node != NULL; node = node->Next, index++)
-    {
-        if (length == node->Movie.Length)
-            movies[index] = node->Movie;
-    }
-
-    return movies;
 }
 
 void SaveStatus(const std::string& filepath)
@@ -981,11 +862,6 @@ int CountByLang(std::string language)
     }
 
     return total;
-}
-
-int GetSize()
-{
-    return m_Size;
 }
 
 void UpdateId(int oldID, int newID)
@@ -1170,7 +1046,7 @@ void SortedByPrice(Node** head_ref, Node* newNode)
     {
         current = *head_ref;
         while (current->Next != NULL &&
-               current->Next->Movie.Price < newNode->Movie.Price)
+               current->Next->Movie.Price > newNode->Movie.Price)
             current = current->Next;
 
         newNode->Next = current->Next;
@@ -1230,7 +1106,7 @@ void SortedByRate(Node** head_ref, Node* newNode)
     {
         current = *head_ref;
         while (current->Next != NULL &&
-               current->Next->Movie.Rate < newNode->Movie.Rate)
+               current->Next->Movie.Rate > newNode->Movie.Rate)
             current = current->Next;
 
         newNode->Next = current->Next;
@@ -1466,6 +1342,11 @@ int IndexOf(Movie movie)
 {
     ASSERT(!IsEmpty(), "[Error] IllegalAccessException thrown from 'IndexOf(...)'. The list is empty.");
     return IndexOf(movie.ID);
+}
+
+int GetSize()
+{
+    return m_Size;
 }
 
 bool Contains(int movieID)

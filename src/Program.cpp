@@ -648,6 +648,226 @@ otherFunctionalities:
     std::cout << "2. To search movies.\n";
     std::cout << "3. To count movies.\n";
     std::cout << "4. To save your status.\n";
+    std::cout << ">> ";
+    std::cin >> choice;
+
+    if (choice == 1)
+    {
+    displayTop:
+        int amount;
+        std::cout << "\nEnter the amount of movies: ";
+        std::cin >> amount;
+        VALIDATE(amount <= GetSize() && amount > 0, displayTop, "[Warning] Invalid amount. The amount should be between 0 and the amount of movies existed.");
+
+    topInput:
+        int c;
+        std::cout << "\nSorted by\n";
+        std::cout << "1. ID\n";
+        std::cout << "2. Title\n";
+        std::cout << "3. Price\n";
+        std::cout << "4. Rate\n";
+        std::cout << "5. Date\n";
+        std::cout << ">> ";
+        std::cin >> c;
+
+        if (c == 1)
+        {
+            TopByID(amount);
+            system("pause");
+        }
+        else if (c == 2)
+        {
+            TopByTitle(amount);
+            system("pause");
+        }
+        else if (c == 3)
+        {
+            TopByPrice(amount);
+            system("pause");
+        }
+        else if (c == 4)
+        {
+            TopByRate(amount);
+            system("pause");
+        }
+        else if (c == 5)
+        {
+            TopByDate(amount);
+            system("pause");
+        }
+        else
+        {
+            std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+            system("pause");
+            goto topInput;
+        }
+    }
+    else if (choice == 2)
+    {
+    searchInput:
+        int c;
+        std::cout << "\nSearch by\n";
+        std::cout << "1. ID\n";
+        std::cout << "2. Title\n";
+        std::cout << "3. Price\n";
+        std::cout << "4. Rate\n";
+        std::cout << "5. Length\n";
+        std::cout << "6. Genre\n";
+        std::cout << "7. Date\n";
+        std::cout << "8. Language\n";
+        std::cout << ">> ";
+        std::cin >> c;
+
+        if (c == 1)
+        {
+            int id;
+            std::cout << "\nEnter the id of the movie: ";
+            std::cin >> id;
+
+            Movie movie = GetById(id);
+            if (movie.ID == NULL)
+                std::cout << "[Warning] There is no such movie with this id number.\n";
+            else printMovie(movie);
+
+            system("pause");
+        }
+        else if (c == 2)
+        {
+            char title[25];
+            std::cout << "\nEnter the title of the movie: ";
+            std::cin >> title;
+
+            Movie movie = GetByTitle(title);
+            if (movie.ID == NULL)
+                std::cout << "[Warning] There is no such movie with this title.\n";
+            else printMovie(movie);
+
+            system("pause");
+        }
+        else if (c == 3)
+        {
+            float price;
+            std::cout << "\nEnter the price of the movie(s): ";
+            std::cin >> price;
+            
+            GetByPrice(price);
+
+            system("pause");
+        }
+        else if (c == 4)
+        {
+            float rating;
+            std::cout << "\nEnter the rating of the movie(s): ";
+            std::cin >> rating;
+            
+            GetByRate(rating);
+
+            system("pause");
+        }
+        else if (c == 5)
+        {
+            float length;
+            std::cout << "\nEnter the length of the movie(s): ";
+            std::cin >> length;
+            
+            GetByLength(length);
+
+            system("pause");
+        }
+        else if (c == 6)
+        {
+            char genre[25];
+            std::cout << "\nEnter the genre of the movie(s): ";
+            std::cin >> genre;
+            
+            GetByGenre(genre);
+
+            system("pause");
+        }
+        else if (c == 7)
+        {
+            char date[25];
+            std::cout << "\nEnter the date of the movie(s): ";
+            std::cin >> date;
+            
+            GetByDate(date);
+
+            system("pause");
+        }
+        else if (c == 8)
+        {
+            char lang[25];
+            std::cout << "\nEnter the language of the movie(s): ";
+            std::cin >> lang;
+            
+            GetByLang(lang);
+
+            system("pause");
+        }
+        else
+        {
+            std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+            system("pause");
+            goto searchInput;
+        }
+    }
+    else if (choice == 3)
+    {
+    countInput:
+        int c;
+        std::cout << "\nDo you want to count movies by their\n";
+        std::cout << "1. Price\n";
+        std::cout << "2. Rate\n";
+        std::cout << "3. Length\n";
+        std::cout << "4. Genre\n";
+        std::cout << "5. Date\n";
+        std::cout << "5. Language\n";
+        std::cout << ">> ";
+        std::cin >> c;
+
+        if (c == 1)
+        {
+        priceInput:
+            float price;
+            std::cout << "\nEnter the amount of price: ";
+            std::cin >> price;
+            VALIDATE(price >= 0, priceInput, "[Warning] Invalid amount of price. It should be >= 0.");
+
+            int amount = CountByPrice()
+        }
+        else if (c == 2)
+        {
+
+        }
+        else if (c == 3)
+        {
+
+        }
+        else if (c == 4)
+        {
+
+        }
+        else if (c == 5)
+        {
+
+        }
+        else
+        {
+            std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+            system("pause");
+            goto countInput;
+        }
+    }
+    else if (choice == 4)
+    {
+
+    }
+    else
+    {
+        std::cout << "[Warning] Invalid data passed to the program. Please re-enter the validated choice!\n";
+        system("pause");
+        goto otherFunctionalities;
+    }
 }
 
 void Help()
